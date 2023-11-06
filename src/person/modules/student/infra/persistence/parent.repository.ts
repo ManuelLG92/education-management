@@ -1,31 +1,20 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, ManyToMany } from 'typeorm';
 import { SchoolRepository } from '../../../../../school/infra/persistence/school.repository';
 import { PersonRepository } from '../../../../infra/persistence/person.repository';
-import { IStudentOutput } from '../../domain/student.entity';
 import { PersonRoles } from '../../../../domain/person';
+import { StudentRepository } from './student.repository';
 import { IParentOutput } from '../../domain/parent.entity';
-import { ParentRepository } from './parent.repository';
 
-@Entity('student')
-export class StudentRepository
+@Entity('parent')
+export class ParentRepository
   extends PersonRepository
-  implements IStudentOutput
+  implements IParentOutput
 {
-  @Column({ type: 'varchar', length: 100, nullable: true, default: 'backward' })
-  level: string;
-
   @Column({
     type: 'varchar',
     length: 100,
     nullable: true,
-    default: PersonRoles.STUDENT,
+    default: PersonRoles.PARENT,
   })
   role: PersonRoles;
 
@@ -36,7 +25,6 @@ export class StudentRepository
   @JoinColumn({ name: 'schoolId' })
   school: SchoolRepository;
 
-  @ManyToMany(() => ParentRepository, (student) => student.students)
-  @JoinTable()
-  parents: ReadonlyArray<IParentOutput>;
+  @ManyToMany(() => StudentRepository, (student) => student.parents)
+  students: readonly StudentRepository[];
 }

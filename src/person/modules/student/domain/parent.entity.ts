@@ -13,16 +13,15 @@ type IBaseParent = {
 export type IParentOutput = IBaseParent & IPersonOut & IBase;
 
 export type IParentInput = {
-  person: IPerson;
+  person: Omit<IPerson, 'role'>;
 } & IBaseParent;
 
 export class Parent extends Person {
   public readonly schoolId: string;
   protected readonly role: PersonRoles;
   constructor({ schoolId, person }: IParentInput) {
-    super(person);
+    super({ ...person, role: PersonRoles.PARENT });
     this.schoolId = schoolId;
-    this.role = PersonRoles.PARENT;
     this.ensureMajor();
   }
 

@@ -1,6 +1,7 @@
 import { BaseRepository } from '../../../common/entities/base.repository';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { StudentRepository } from '../../../person/modules/student/infra/persistence/student.repository';
+import { ParentRepository } from '../../../person/modules/student/infra/persistence/parent.repository';
 
 @Entity('school')
 export class SchoolRepository extends BaseRepository {
@@ -9,4 +10,7 @@ export class SchoolRepository extends BaseRepository {
 
   @OneToMany(() => StudentRepository, (student) => student.school)
   students: StudentRepository[];
+
+  @OneToMany(() => ParentRepository, (parent) => parent.school)
+  parents: ParentRepository[];
 }

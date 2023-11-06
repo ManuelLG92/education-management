@@ -26,7 +26,10 @@ export class StudentService {
   }
 
   async findOne(id: string) {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({
+      relations: { parents: true },
+      where: { id },
+    });
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {
