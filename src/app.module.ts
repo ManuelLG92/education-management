@@ -3,9 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchoolModule } from './school/school.module';
 import { PersonModule } from './person/person.module';
-import { StudentModule } from './student/student.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { StudentRepository } from './student/infrastructure/student.repository';
 
 @Module({
   imports: [
@@ -22,7 +20,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     SchoolModule,
     PersonModule,
-    StudentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

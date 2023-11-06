@@ -1,8 +1,8 @@
-import { Person } from '../../person/entities/person';
+import { AggregateRoot } from '../../common/entities/aggregate-root';
 
-export class School extends Person {
-  constructor(name: string) {
-    super(name);
+export class School extends AggregateRoot {
+  constructor(public readonly name: string) {
+    super();
   }
   toPersistence() {
     return {

@@ -1,6 +1,12 @@
 import { Column, PrimaryColumn } from 'typeorm';
 
-export abstract class BaseRepository {
+export interface IBaseRepository {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+export abstract class BaseRepository implements IBaseRepository {
   @PrimaryColumn({ type: 'varchar', length: 50 })
   id: string;
 

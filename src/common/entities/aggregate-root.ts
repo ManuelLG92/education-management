@@ -1,5 +1,11 @@
 import { IdGenerator } from './id-generator';
 
+export type IBase = {
+  id: string;
+  createdAt: Date;
+  updatedAt?: Date;
+};
+
 export abstract class AggregateRoot {
   protected readonly id: string;
   protected readonly createdAt: Date;
@@ -13,6 +19,7 @@ export abstract class AggregateRoot {
   get updatedAt(): Date {
     return this._updatedAt;
   }
+  abstract toPersistence(): Record<string, unknown>;
 
   toPersistenceRootTypes() {
     return {
