@@ -6,12 +6,14 @@ import { SchoolRepository } from './infra/persistence/school.repository';
 import { SeasonModule } from './modules/season/season.module';
 import { CourseModule } from './modules/course/course.module';
 import { SubjectModule } from './modules/subject/subject.module';
+import { SectionModule } from './modules/section/section.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([SchoolRepository]),
-    SeasonModule,
     CourseModule,
+    SeasonModule,
+    SectionModule,
     SubjectModule,
   ],
   controllers: [SchoolController],

@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 import { SchoolRepository } from '../../../../../school/infra/persistence/school.repository';
 import { PersonRepository } from '../../../../infra/persistence/person.repository';
-import { IStudentOutput } from '../../domain/student.entity';
+import { IStudentOutput } from '../../domain/student';
 import { PersonRoles } from '../../../../domain/person';
-import { IParentOutput } from '../../domain/parent.entity';
+import { IParentOutput } from '../../domain/parent';
 import { ParentRepository } from './parent.repository';
 
 @Entity('student')

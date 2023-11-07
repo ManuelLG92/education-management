@@ -4,7 +4,8 @@ import { UpdateSchoolDto } from '../infra/controllers/dto/update-school.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SchoolRepository } from '../infra/persistence/school.repository';
-import { School } from '../domain/school.entity';
+import { School } from '../domain/school';
+import { Address } from '../../person/domain/address';
 
 @Injectable()
 export class SchoolService {
@@ -12,8 +13,12 @@ export class SchoolService {
     @InjectRepository(SchoolRepository)
     private readonly repository: Repository<SchoolRepository>,
   ) {}
-  async create({ name }: CreateSchoolDto) {
-    const school = new School(name);
+  async create({ name, address }: CreateSchoolDto) {
+    const { city, country, cp, state, street } = address;
+    const school = new School(
+      name,
+      new Address(city, country, cp, state, street),
+    );
     return this.repository.insert(school.toPersistence());
   }
 

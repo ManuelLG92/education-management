@@ -6,7 +6,7 @@ import {
 } from '../../../domain/person';
 import { IBase } from '../../../../common/entities/aggregate-root';
 import { BadRequestException } from '@nestjs/common';
-import { IParentInput, IParentOutput, Parent } from './parent.entity';
+import { IParentInput, IParentOutput, Parent } from './parent';
 
 type IBaseStudent = {
   schoolId: string;

@@ -5,28 +5,37 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AddressDto {
   @IsString()
+  @ApiProperty()
   street: string;
   @IsString()
+  @ApiProperty()
   state: string;
   @IsString()
+  @ApiProperty()
   city: string;
   @IsPositive()
+  @ApiProperty()
   cp: number;
   @IsString()
+  @ApiProperty()
   country: string;
 }
 export class CreatePersonDto {
   @IsString()
+  @ApiProperty()
   name: string;
 
   @IsPositive()
+  @ApiProperty()
   age: number;
 
   @ValidateNested()
   @IsObject()
   @Type(() => AddressDto)
+  @ApiProperty()
   address: AddressDto;
 }

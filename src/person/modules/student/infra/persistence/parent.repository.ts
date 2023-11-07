@@ -3,7 +3,7 @@ import { SchoolRepository } from '../../../../../school/infra/persistence/school
 import { PersonRepository } from '../../../../infra/persistence/person.repository';
 import { PersonRoles } from '../../../../domain/person';
 import { StudentRepository } from './student.repository';
-import { IParentOutput } from '../../domain/parent.entity';
+import { IParentOutput } from '../../domain/parent';
 
 @Entity('parent')
 export class ParentRepository
