@@ -23,12 +23,11 @@ export class Teacher extends Person {
   }
   toPersistence(): ITeacherOutput {
     return {
-      name: this.name,
       age: this.age,
+      name: this.name,
       role: this.role,
       address: this.address.toPersistence(),
       schoolId: this.schoolId,
-      ...this.toPersistence.bind(Person),
       ...this.toPersistenceRootTypes(),
     };
   }
