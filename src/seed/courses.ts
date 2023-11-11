@@ -17,9 +17,7 @@ export const exec = () => {
     name: faker.company.name(),
     createdAt: new Date(),
   });
-  const subjectCollection = repeaterFactory(10, () => subject());
-
-  const availableSubjects = subjectCollection;
+  const availableSubjects = repeaterFactory(10, () => subject());
   const school = (seasons: SeasonRepository[] = []): SchoolRepository => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
