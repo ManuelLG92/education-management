@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchoolModule } from './school/school.module';
@@ -24,4 +24,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+  async onApplicationBootstrap() {
+    // const x = await fetch('http://localhost:3000/students');
+    // console.log(x);
+  }
+}

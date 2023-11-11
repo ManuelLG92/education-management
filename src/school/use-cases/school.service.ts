@@ -25,7 +25,7 @@ export class SchoolService {
   async findAll() {
     return this.repository.find({
       relations: {
-        students: true,
+        seasons: true,
       },
     });
   }
@@ -33,17 +33,15 @@ export class SchoolService {
   async findOne(id: string) {
     const result = await this.repository.findOne({
       where: { id },
-      relations: { students: true },
+      relations: { seasons: true },
     });
 
     return {
       id: result.id,
       name: result.name,
-      students: result.students.map((student) => ({
+      seasons: result.seasons.map((student) => ({
         id: student.id,
         name: student.name,
-        age: student.age,
-        level: student.level,
       })),
     };
   }

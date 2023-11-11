@@ -11,6 +11,7 @@ export class School extends AggregateRoot {
   toPersistence() {
     return {
       name: this.name,
+      address: this.address.toPersistence(),
       ...this.toPersistenceRootTypes(),
     };
   }

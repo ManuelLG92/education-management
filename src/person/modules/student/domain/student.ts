@@ -6,38 +6,37 @@ import {
 } from '../../../domain/person';
 import { IBase } from '../../../../common/entities/aggregate-root';
 import { BadRequestException } from '@nestjs/common';
-import { IParentInput, IParentOutput, Parent } from './parent';
+import { IParentInput, Parent } from './parent';
+import { SectionRepository } from '../../../../school/modules/course/modules/section/infra/persistence/section.repository';
 
 type IBaseStudent = {
-  schoolId: string;
-  level: string;
+  section: SectionRepository;
 };
 export type IStudentOutput = {
-  parents: ReadonlyArray<IParentOutput>;
+  parents: ReadonlyArray<IPersonOut>;
+  section: SectionRepository;
 } & IBaseStudent &
   IPersonOut &
   IBase;
 
 export type IStudentInput = {
-  person: Omit<IPerson, 'role'>;
-  parents: ReadonlyArray<IParentInput>;
-} & IBaseStudent;
+  parents: Array<IParentInput>;
+} & Omit<IPerson, 'role'> &
+  IBaseStudent;
 
 export class Student extends Person {
-  public readonly level: string;
-  public readonly schoolId: string;
+  public readonly section: SectionRepository;
   protected readonly role: PersonRoles;
-  protected readonly parents: ReadonlyArray<Parent>;
-  constructor({ level, schoolId, person, parents }: IStudentInput) {
-    super({ ...person, role: PersonRoles.STUDENT });
-    this.schoolId = schoolId;
-    this.level = level;
+  protected readonly parents: Array<Parent>;
+  constructor({ parents, ...rest }: IStudentInput) {
+    super({ ...rest, role: PersonRoles.STUDENT });
+    this.section = rest.section;
     this.parents = parents.map((item) => new Parent(item));
     this.ensuredParentIfMinor();
   }
 
   toPersistence(): IStudentOutput {
-    const parents: ReadonlyArray<IParentOutput> = this.parents.map((parent) =>
+    const parents: Array<IPersonOut> = this.parents.map((parent) =>
       parent.toPersistence(),
     );
     return {
@@ -45,8 +44,7 @@ export class Student extends Person {
       age: this.age,
       role: this.role,
       address: this.address.toPersistence(),
-      level: this.level,
-      schoolId: this.schoolId,
+      section: this.section,
       parents,
       ...this.toPersistenceRootTypes(),
     };

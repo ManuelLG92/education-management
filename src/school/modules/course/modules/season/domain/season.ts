@@ -1,5 +1,5 @@
-import { AggregateRoot } from '../../../../common/entities/aggregate-root';
-import { Course } from '../../course/domain/course';
+import { AggregateRoot } from '../../../../../../common/entities/aggregate-root';
+import { Course } from '../../../domain/course';
 
 export class Season extends AggregateRoot {
   constructor(

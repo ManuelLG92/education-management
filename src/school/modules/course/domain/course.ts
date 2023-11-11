@@ -1,6 +1,6 @@
 import { AggregateRoot } from '../../../../common/entities/aggregate-root';
-import { Subject } from '../../subject/domain/subject';
-import { Section } from '../../section/domain/section';
+import { Subject } from '../modules/subject/domain/subject';
+import { Section } from '../modules/section/domain/section';
 
 export class Course extends AggregateRoot {
   constructor(

@@ -39,6 +39,7 @@ export abstract class Person extends AggregateRoot {
       age: this.age,
       role: this.role,
       address: this.address.toPersistence(),
+      ...this.toPersistenceRootTypes(),
     };
   }
 }

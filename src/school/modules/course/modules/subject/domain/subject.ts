@@ -1,5 +1,5 @@
-import { AggregateRoot } from '../../../../common/entities/aggregate-root';
-import { Teacher } from '../../../../person/modules/teacher/domain/teacher';
+import { AggregateRoot } from '../../../../../../common/entities/aggregate-root';
+import { Teacher } from '../../../../../../person/modules/teacher/domain/teacher';
 
 export class Subject extends AggregateRoot {
   constructor(
