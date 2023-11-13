@@ -17,7 +17,8 @@ export class TeacherController {
 
   @Post()
   create(@Body() createSchoolDto: CreateTeacherDto) {
-    return this.service.create(createSchoolDto);
+    // return this.service.create(createSchoolDto);
+    return true;
   }
 
   @Get()

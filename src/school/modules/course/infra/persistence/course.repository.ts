@@ -9,13 +9,13 @@ export class CourseRepository extends BaseRepository {
   @Column({ type: 'varchar', length: 100 })
   name: string;
 
-  @ManyToMany(() => SectionRepository, (sections) => sections.courses)
+  @ManyToMany(() => SectionRepository, { cascade: true, eager: true })
   @JoinTable()
   sections: ReadonlyArray<SectionRepository>;
 
-  @OneToMany(() => SubjectRepository, (s) => s.id)
+  @OneToMany(() => SubjectRepository, (s) => s.course)
   subjects: ReadonlyArray<SubjectRepository>;
 
-  @ManyToMany(() => SeasonRepository, (c) => c.courses)
+  @ManyToMany(() => SeasonRepository)
   seasons: SeasonRepository[];
 }

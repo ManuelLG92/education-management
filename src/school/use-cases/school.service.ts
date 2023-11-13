@@ -18,8 +18,10 @@ export class SchoolService {
     const school = new School(
       name,
       new Address(city, country, cp, state, street),
+      [],
     );
-    return this.repository.insert(school.toPersistence());
+    await this.repository.insert(school.toPersistence());
+    return school;
   }
 
   async findAll() {

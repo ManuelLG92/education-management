@@ -17,7 +17,8 @@ export class SubjectController {
 
   @Post()
   create(@Body() createSchoolDto: CreateSubjectDto) {
-    return this.service.create(createSchoolDto);
+    // return this.service.create(createSchoolDto);
+    return true;
   }
 
   @Get()

@@ -4,6 +4,7 @@ import { UpdateSeasonDto } from '../infra/controllers/dto/update-season.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SeasonRepository } from '../infra/persistence/season.repository';
+import { Season } from '../domain/season';
 
 @Injectable()
 export class SeasonService {
@@ -11,12 +12,20 @@ export class SeasonService {
     @InjectRepository(SeasonRepository)
     private readonly repository: Repository<SeasonRepository>,
   ) {}
-  async create({}: CreateSeasonDto) {
-    throw new Error('Not implemented yet');
+  async create(data: CreateSeasonDto) {
+    const season = new Season(
+      data.name,
+      data.school,
+      data.startAt,
+      data.endAt,
+      data.courses,
+    );
+    await this.repository.insert(season.toPersistence());
+    return season;
   }
 
   async findAll() {
-    throw new Error('Not implemented yet');
+    return this.repository.find({ relations: { courses: true, school: true } });
   }
 
   async findOne(id: string) {

@@ -8,6 +8,8 @@ import { IBase } from '../../../../common/entities/aggregate-root';
 import { BadRequestException } from '@nestjs/common';
 import { IParentInput, Parent } from './parent';
 import { SectionRepository } from '../../../../school/modules/course/modules/section/infra/persistence/section.repository';
+import { ParentRepository } from '../infra/persistence/parent.repository';
+import { StudentRepository } from '../infra/persistence/student.repository';
 
 type IBaseStudent = {
   section: SectionRepository;
@@ -35,8 +37,8 @@ export class Student extends Person {
     this.ensuredParentIfMinor();
   }
 
-  toPersistence(): IStudentOutput {
-    const parents: Array<IPersonOut> = this.parents.map((parent) =>
+  toPersistence(): StudentRepository {
+    const parents: Array<ParentRepository> = this.parents.map((parent) =>
       parent.toPersistence(),
     );
     return {

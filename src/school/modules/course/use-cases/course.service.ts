@@ -4,6 +4,9 @@ import { UpdateCourseDto } from '../infra/controllers/dto/update-course.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CourseRepository } from '../infra/persistence/course.repository';
+import { Course } from '../domain/course';
+import { Subject } from '../modules/subject/domain/subject';
+import { Season } from '../modules/season/domain/season';
 
 @Injectable()
 export class CourseService {
@@ -11,16 +14,24 @@ export class CourseService {
     @InjectRepository(CourseRepository)
     private readonly repository: Repository<CourseRepository>,
   ) {}
-  async create({}: CreateCourseDto) {
-    throw new Error('Not implemented yet');
+  async create(
+    data: CreateCourseDto,
+    subjects: Array<Subject>,
+    seasons: Array<Season>,
+  ) {
+    const entity = new Course(data.name, subjects, seasons, []);
+    await this.repository.insert(entity.toPersistence());
+    return this.findOne(entity.id);
   }
 
   async findAll() {
-    throw new Error('Not implemented yet');
+    return this.repository.find({
+      relations: { subjects: true, seasons: true, sections: true },
+    });
   }
 
   async findOne(id: string) {
-    throw new Error(`Not implemented yet ${id}`);
+    return this.repository.findOneBy({ id });
   }
 
   async update(id: string, updateSchoolDto: UpdateCourseDto) {

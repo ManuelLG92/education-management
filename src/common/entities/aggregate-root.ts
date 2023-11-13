@@ -19,7 +19,7 @@ export abstract class AggregateRoot {
   get updatedAt(): Date {
     return this._updatedAt;
   }
-  abstract toPersistence(): Record<string, unknown>;
+  abstract toPersistence(): any;
 
   get id(): string {
     return this._id;

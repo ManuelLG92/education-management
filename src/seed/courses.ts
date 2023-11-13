@@ -16,6 +16,7 @@ export const exec = () => {
     id: faker.string.uuid(),
     name: faker.company.name(),
     createdAt: new Date(),
+    course: null,
   });
   const availableSubjects = repeaterFactory(10, () => subject());
   const school = (seasons: SeasonRepository[] = []): SchoolRepository => ({
@@ -28,7 +29,7 @@ export const exec = () => {
       country: faker.location.country(),
       state: faker.location.state(),
       street: faker.location.streetAddress(),
-      cp: +faker.location.zipCode(),
+      cp: faker.number.int({ max: 3000 }),
     },
   });
 
@@ -71,7 +72,7 @@ export const exec = () => {
     id: faker.string.uuid(),
     createdAt: new Date(),
     name: faker.person.firstName(),
-    age: faker.number.int({ min: 18 }),
+    age: faker.number.int({ min: 18, max: 100 }),
     role: PersonRoles.STUDENT,
     parents: [],
     section,
@@ -80,7 +81,7 @@ export const exec = () => {
       country: faker.location.country(),
       state: faker.location.state(),
       street: faker.location.streetAddress(),
-      cp: +faker.location.zipCode(),
+      cp: faker.number.int({ max: 3000 }),
     },
   });
 
@@ -92,12 +93,12 @@ export const exec = () => {
   section1.courses = [course1];
   const student1 = student(section1);
   section1.students = [student1];
-  console.log('school', school1);
-  console.log('season', season1);
-  console.log('course', course1);
-  console.log('section', section1);
-  console.log('student', student1);
-  console.log('subjects', availableSubjects);
+  // console.log('school', school1);
+  // console.log('season', season1);
+  // console.log('course', course1);
+  // console.log('section', section1);
+  // console.log('student', student1);
+  // console.log('subjects', availableSubjects);
 
   return {
     school: school1,

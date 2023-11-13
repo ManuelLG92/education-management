@@ -4,6 +4,8 @@ import { UpdateSectionDto } from '../infra/controllers/dto/update-section.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SectionRepository } from '../infra/persistence/section.repository';
+import { Section } from '../domain/section';
+import { CourseRepository } from '../../../infra/persistence/course.repository';
 
 @Injectable()
 export class SectionService {
@@ -11,16 +13,20 @@ export class SectionService {
     @InjectRepository(SectionRepository)
     private readonly repository: Repository<SectionRepository>,
   ) {}
-  async create(data: CreateSectionDto) {
-    throw new Error(`Not implemented yet. ${data.name}`);
+  async create(data: CreateSectionDto, course: Array<CourseRepository>) {
+    const section = new Section(data.name, course, []);
+    await this.repository.insert(section.toPersistence());
+    return section;
   }
 
   async findAll() {
-    throw new Error('Not implemented yet');
+    return this.repository.find({
+      relations: { courses: true, students: true },
+    });
   }
 
   async findOne(id: string) {
-    throw new Error(`Not implemented yet ${id}`);
+    return this.repository.findOneBy({ id });
   }
 
   async update(id: string, updateSchoolDto: UpdateSectionDto) {

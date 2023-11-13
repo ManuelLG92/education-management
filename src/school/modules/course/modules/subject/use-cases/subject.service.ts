@@ -4,6 +4,8 @@ import { UpdateSubjectDto } from '../infra/controllers/dto/update-subject.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SubjectRepository } from '../infra/persistence/subject.repository';
+import { Subject } from '../domain/subject';
+import { CourseRepository } from '../../../infra/persistence/course.repository';
 
 @Injectable()
 export class SubjectService {
@@ -11,8 +13,10 @@ export class SubjectService {
     @InjectRepository(SubjectRepository)
     private readonly repository: Repository<SubjectRepository>,
   ) {}
-  async create({}: CreateSubjectDto) {
-    throw new Error('Not implemented yet');
+  async create(data: CreateSubjectDto, teacher: CourseRepository) {
+    const entity = new Subject(data.name, teacher);
+    await this.repository.insert(entity.toPersistence());
+    return entity;
   }
 
   async findAll() {

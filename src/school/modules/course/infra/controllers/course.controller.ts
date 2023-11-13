@@ -17,7 +17,8 @@ export class CourseController {
 
   @Post()
   create(@Body() createSchoolDto: CreateCourseDto) {
-    return this.service.create(createSchoolDto);
+    // return this.service.create(createSchoolDto);
+    return true;
   }
 
   @Get()

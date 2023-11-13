@@ -14,10 +14,10 @@ export class SeasonRepository extends BaseRepository {
   @Column({ type: 'date' })
   endAt: Date;
 
-  @ManyToMany(() => CourseRepository, (course) => course.seasons)
+  @ManyToMany(() => CourseRepository, { cascade: true, eager: true })
   @JoinTable()
   courses: ReadonlyArray<CourseRepository>;
 
-  @ManyToOne(() => SchoolRepository, (school) => school.seasons)
+  @ManyToOne(() => SchoolRepository)
   school: SchoolRepository;
 }

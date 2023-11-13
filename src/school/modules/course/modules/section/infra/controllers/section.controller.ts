@@ -17,7 +17,8 @@ export class SectionController {
 
   @Post()
   create(@Body() data: CreateSectionDto) {
-    return this.service.create(data);
+    // return this.service.create(data);
+    return true;
   }
 
   @Get()

@@ -1,17 +1,18 @@
 import { AggregateRoot } from '../../../../../../common/entities/aggregate-root';
-import { Teacher } from '../../../../../../person/modules/teacher/domain/teacher';
+import { SubjectRepository } from '../infra/persistence/subject.repository';
+import { CourseRepository } from '../../../infra/persistence/course.repository';
 
 export class Subject extends AggregateRoot {
   constructor(
     public readonly name: string,
-    public readonly teacher: Teacher,
+    public readonly course: CourseRepository,
   ) {
     super();
   }
-  toPersistence(): Record<string, unknown> {
+  toPersistence(): SubjectRepository {
     return {
+      course: this.course,
       name: this.name,
-      teacher: this.teacher,
       ...this.toPersistenceRootTypes(),
     };
   }
