@@ -21,7 +21,7 @@ export class StudentService {
       throw new BadRequestException('Some parent does not exist');
     }
     const student = new Student({ ...data, parents: parentsFound });
-    await this.repository.save(student.toPersistence());
+    await this.repository.insert(student.toPersistence());
     return student;
   }
 

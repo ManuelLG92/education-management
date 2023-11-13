@@ -13,4 +13,15 @@ export class SchoolRepository extends BaseRepository {
 
   @Column(() => AddressRepository, {})
   address: AddressRepository;
+
+  constructor(
+    name: string,
+    seasons: SeasonRepository[],
+    address: AddressRepository,
+  ) {
+    super();
+    this.name = name;
+    this.seasons = seasons;
+    this.address = address;
+  }
 }

@@ -14,7 +14,7 @@ export class TeacherService {
   ) {}
   async create(data: CreateTeacherDto, schoolId: string) {
     const entity = new Teacher({ person: data, schoolId });
-    await this.repository.save(entity.toPersistence());
+    await this.repository.insert(entity.toPersistence());
     return entity;
   }
 
