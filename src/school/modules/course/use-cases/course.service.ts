@@ -20,7 +20,7 @@ export class CourseService {
     seasons: Array<Season>,
   ) {
     const entity = new Course(data.name, subjects, seasons, []);
-    await this.repository.insert(entity.toPersistence());
+    await this.repository.save(entity.toPersistence());
     return this.findOne(entity.id);
   }
 

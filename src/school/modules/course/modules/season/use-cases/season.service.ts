@@ -20,7 +20,7 @@ export class SeasonService {
       data.endAt,
       data.courses,
     );
-    await this.repository.insert(season.toPersistence());
+    await this.repository.save(season.toPersistence());
     return season;
   }
 

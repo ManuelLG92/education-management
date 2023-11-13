@@ -15,7 +15,7 @@ export class SubjectService {
   ) {}
   async create(data: CreateSubjectDto, teacher: CourseRepository) {
     const entity = new Subject(data.name, teacher);
-    await this.repository.insert(entity.toPersistence());
+    await this.repository.save(entity.toPersistence());
     return entity;
   }
 

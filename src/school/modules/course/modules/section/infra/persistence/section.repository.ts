@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseRepository } from '../../../../../../../common/entities/base.repository';
 import { StudentRepository } from '../../../../../../../person/modules/student/infra/persistence/student.repository';
 import { CourseRepository } from '../../../../infra/persistence/course.repository';
@@ -12,5 +12,6 @@ export class SectionRepository extends BaseRepository {
   students: ReadonlyArray<StudentRepository>;
 
   @ManyToMany(() => CourseRepository, (course) => course.sections)
+  @JoinTable()
   courses: ReadonlyArray<CourseRepository>;
 }

@@ -15,7 +15,7 @@ export class SectionService {
   ) {}
   async create(data: CreateSectionDto, course: Array<CourseRepository>) {
     const section = new Section(data.name, course, []);
-    await this.repository.insert(section.toPersistence());
+    await this.repository.save(section.toPersistence());
     return section;
   }
 

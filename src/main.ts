@@ -54,12 +54,12 @@ async function bootstrap() {
 
     const seasonService = await app.resolve<SeasonService>(SeasonService);
 
-    const seasonCreated = await seasonService.create({
+    await seasonService.create({
       ...season,
       school: schoolCreated,
       courses: [courseCreated],
     });
-    console.log(seasonCreated);
+    // console.log(seasonCreated);
 
     const subjectsService = await app.resolve<SubjectService>(SubjectService);
     await subjectsService.create(
@@ -80,7 +80,7 @@ async function bootstrap() {
 
     const studentService = await app.resolve<StudentService>(StudentService);
 
-    const studentCreated = await studentService.create({
+    await studentService.create({
       ...student,
       schoolId: schoolCreated.id,
       person: student,
@@ -91,7 +91,7 @@ async function bootstrap() {
       sectionId: sectionCreated.id,
       parentsId: [],
     });
-    console.log(studentCreated);
+    // console.log(studentCreated);
   };
   await seed();
 }
