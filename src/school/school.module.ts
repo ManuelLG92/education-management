@@ -7,10 +7,13 @@ import { SeasonModule } from './modules/course/modules/season/season.module';
 import { CourseModule } from './modules/course/course.module';
 import { SubjectModule } from './modules/course/modules/subject/subject.module';
 import { SectionModule } from './modules/course/modules/section/section.module';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { School } from './infra/persistence/School';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([SchoolRepository]),
+    MikroOrmModule.forFeature([School]),
     CourseModule,
     SeasonModule,
     SectionModule,

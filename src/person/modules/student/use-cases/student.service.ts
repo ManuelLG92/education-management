@@ -1,57 +1,73 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateStudentDto } from '../infra/controllers/dto/create-student.dto';
 import { UpdateStudentDto } from '../infra/controllers/dto/update-student.dto';
-import { StudentRepository } from '../infra/persistence/student.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Student } from '../domain/student';
-import { ParentsService } from './parents.service';
+import { Collection, EntityManager, EntityRepository } from '@mikro-orm/core';
+import { Student as NewStudent } from '../infra/persistence/Student';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { Section } from '../../../../school/modules/course/modules/section/infra/persistence/Section';
+import { Parent } from '../infra/persistence/Parent';
 
 @Injectable()
 export class StudentService {
+  private readonly repo: EntityRepository<NewStudent>;
   constructor(
-    @InjectRepository(StudentRepository)
-    private readonly repository: Repository<StudentRepository>,
-    private readonly parentsService: ParentsService,
-  ) {}
+    @InjectRepository(NewStudent)
+    private readonly repository: EntityRepository<NewStudent>,
+    private readonly em: EntityManager,
+  ) {
+    this.repo = em.getRepository(NewStudent);
+  }
   async create(data: CreateStudentDto) {
     const parentsId = data.parentsId;
-    const parentsFound = await this.parentsService.countByIds(parentsId);
+    const parentsFound = await this.em.find(
+      Parent,
+      {
+        id: { $in: parentsId },
+      },
+      {},
+    );
+
     if (parentsId.length !== parentsFound.length) {
       throw new BadRequestException('Some parent does not exist');
     }
-    const student = new Student({ ...data, parents: parentsFound });
-    await this.repository.insert(student.toPersistence());
+    const section = await this.em.findOne(Section, { id: data.sectionId });
+    const parentCollection = new Collection<Parent>(parentsFound);
+    const student = new NewStudent(
+      data.name,
+      data.age,
+      data.address,
+      section,
+      parentCollection,
+    );
+    await this.em.persistAndFlush(student);
     return student;
   }
 
   async findAll() {
-    return this.repository.find({
-      relations: {
-        parents: true,
-        section: true,
+    return this.repository.find(
+      {},
+      {
+        populate: ['parents', 'section'],
       },
-    });
+    );
   }
 
   async findOne(id: string) {
-    return this.repository.findOne({
-      relations: {
-        parents: true,
-        section: {
-          courses: true,
-        },
+    return this.repository.findOne(
+      { id },
+      {
+        populate: ['parents', 'section'],
       },
-      where: { id },
-    });
+    );
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {
     // return this.repository.update(id, updateStudentDto);
-    return Promise.resolve({ id, updateStudentDto });
+
+    await this.repo.nativeUpdate({ id }, updateStudentDto);
   }
 
-  async remove(id: number) {
-    await this.repository.delete(id);
+  async remove(id: string) {
+    await this.repository.nativeDelete({ id });
   }
 }

@@ -3,7 +3,7 @@ import { BaseRepository } from '../../../../../../../common/entities/base.reposi
 import { StudentRepository } from '../../../../../../../person/modules/student/infra/persistence/student.repository';
 import { CourseRepository } from '../../../../infra/persistence/course.repository';
 
-@Entity('section')
+@Entity('section-old')
 export class SectionRepository extends BaseRepository {
   @Column({ type: 'varchar', length: 100 })
   name: string;

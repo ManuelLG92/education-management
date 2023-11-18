@@ -9,6 +9,11 @@ import { SectionRepository } from './modules/section/infra/persistence/section.r
 import { SectionModule } from './modules/section/section.module';
 import { SeasonModule } from './modules/season/season.module';
 import { SubjectModule } from './modules/subject/subject.module';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Course } from './infra/persistence/Course';
+import { Subject } from './modules/subject/infra/persistence/Subject';
+import { Season } from './modules/season/infra/persistence/Season';
+import { Section } from './modules/section/infra/persistence/Section';
 
 @Module({
   imports: [
@@ -21,6 +26,7 @@ import { SubjectModule } from './modules/subject/subject.module';
       SeasonRepository,
       SectionRepository,
     ]),
+    MikroOrmModule.forFeature([Course, Subject, Season, Section]),
   ],
   controllers: [CourseController],
   providers: [CourseService],

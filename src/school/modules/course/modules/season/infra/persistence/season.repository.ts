@@ -3,7 +3,7 @@ import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { CourseRepository } from '../../../../infra/persistence/course.repository';
 import { SchoolRepository } from '../../../../../../infra/persistence/school.repository';
 
-@Entity('season')
+@Entity('season-old')
 export class SeasonRepository extends BaseRepository {
   @Column({ type: 'varchar', length: 100 })
   name: string;

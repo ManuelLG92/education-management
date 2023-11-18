@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SchoolRepository } from '../infra/persistence/school.repository';
 import { School } from '../domain/school';
-import { Address } from '../../person/domain/address';
+import { Address } from '../../person/infra/persistence/Address';
 
 @Injectable()
 export class SchoolService {
@@ -14,13 +14,13 @@ export class SchoolService {
     private readonly repository: Repository<SchoolRepository>,
   ) {}
   async create({ name, address }: CreateSchoolDto) {
-    const { city, country, cp, state, street } = address;
+    const { city, country, postalCode, state, street } = address;
     const school = new School(
       name,
-      new Address(city, country, cp, state, street),
+      new Address(city, country, postalCode.toString(), state, street),
       [],
     );
-    await this.repository.insert(school.toPersistence());
+    await this.repository.insert(school);
     return school;
   }
 

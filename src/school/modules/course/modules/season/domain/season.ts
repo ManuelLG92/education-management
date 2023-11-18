@@ -13,14 +13,4 @@ export class Season extends AggregateRoot {
   ) {
     super();
   }
-  toPersistence(): SeasonRepository {
-    return {
-      name: this.name,
-      school: this.school.toPersistence(),
-      startAt: this.startAt,
-      endAt: this.endAt,
-      courses: this.courses,
-      ...this.toPersistenceRootTypes(),
-    };
-  }
 }

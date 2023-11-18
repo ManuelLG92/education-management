@@ -4,7 +4,7 @@ import { SectionRepository } from '../../modules/section/infra/persistence/secti
 import { SubjectRepository } from '../../modules/subject/infra/persistence/subject.repository';
 import { SeasonRepository } from '../../modules/season/infra/persistence/season.repository';
 
-@Entity('course')
+@Entity('course-old')
 export class CourseRepository extends BaseRepository {
   @Column({ type: 'varchar', length: 100 })
   name: string;

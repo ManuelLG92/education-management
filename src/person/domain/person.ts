@@ -1,6 +1,7 @@
 import { AggregateRoot } from '../../common/entities/aggregate-root';
-import { Address, IAddress } from './address';
 import { ParentRepository } from '../modules/student/infra/persistence/parent.repository';
+import { IAddress } from '../infra/persistence/Address';
+import { Address } from './address';
 
 export type IPersonOut = {
   name: string;
@@ -26,9 +27,9 @@ export abstract class Person extends AggregateRoot {
   protected name: string;
   protected role: PersonRoles;
   protected constructor({ address, age, name, role }: IPerson) {
-    const { city, country, cp, state, street } = address;
+    const { city, country, postalCode, state, street } = address;
     super();
-    this.address = new Address(city, country, cp, state, street);
+    this.address = new Address(city, country, postalCode, state, street);
     this.age = age;
     this.name = name;
     this.role = role;

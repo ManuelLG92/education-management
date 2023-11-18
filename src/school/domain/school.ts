@@ -1,7 +1,6 @@
 import { AggregateRoot } from '../../common/entities/aggregate-root';
-import { Address } from '../../person/domain/address';
-import { SchoolRepository } from '../infra/persistence/school.repository';
 import { Season } from '../modules/course/modules/season/domain/season';
+import { Address } from '../../person/infra/persistence/Address';
 
 export class School extends AggregateRoot {
   constructor(
@@ -10,13 +9,5 @@ export class School extends AggregateRoot {
     public readonly seasons: Array<Season>,
   ) {
     super();
-  }
-  toPersistence(): SchoolRepository {
-    return {
-      name: this.name,
-      address: this.address.toPersistence(),
-      seasons: this.seasons.map((it) => it.toPersistence()),
-      ...this.toPersistenceRootTypes(),
-    };
   }
 }

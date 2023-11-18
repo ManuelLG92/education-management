@@ -6,11 +6,8 @@ import { IParentOutput } from '../../domain/parent';
 import { ParentRepository } from './parent.repository';
 import { SectionRepository } from '../../../../../school/modules/course/modules/section/infra/persistence/section.repository';
 
-@Entity('student')
-export class StudentRepository
-  extends PersonRepository
-  implements IStudentOutput
-{
+@Entity('student-old')
+export class StudentRepository {
   @Column({
     type: 'varchar',
     length: 100,

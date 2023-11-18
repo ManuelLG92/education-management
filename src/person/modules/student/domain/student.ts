@@ -7,16 +7,14 @@ import {
 import { IBase } from '../../../../common/entities/aggregate-root';
 import { BadRequestException } from '@nestjs/common';
 import { IParentInput, Parent } from './parent';
-import { SectionRepository } from '../../../../school/modules/course/modules/section/infra/persistence/section.repository';
-import { ParentRepository } from '../infra/persistence/parent.repository';
-import { StudentRepository } from '../infra/persistence/student.repository';
+import { Section } from '../../../../school/modules/course/modules/section/infra/persistence/Section';
 
 type IBaseStudent = {
-  section: SectionRepository;
+  section: Section;
 };
 export type IStudentOutput = {
   parents: ReadonlyArray<IPersonOut>;
-  section: SectionRepository;
+  section: Section;
 } & IBaseStudent &
   IPersonOut &
   IBase;
@@ -27,7 +25,7 @@ export type IStudentInput = {
   IBaseStudent;
 
 export class Student extends Person {
-  public readonly section: SectionRepository;
+  public readonly section: Section;
   protected readonly role: PersonRoles;
   protected readonly parents: Array<Parent>;
   constructor({ parents, ...rest }: IStudentInput) {
@@ -35,21 +33,6 @@ export class Student extends Person {
     this.section = rest.section;
     this.parents = parents.map((item) => new Parent(item));
     this.ensuredParentIfMinor();
-  }
-
-  toPersistence(): StudentRepository {
-    const parents: Array<ParentRepository> = this.parents.map((parent) =>
-      parent.toPersistence(),
-    );
-    return {
-      name: this.name,
-      age: this.age,
-      role: this.role,
-      address: this.address.toPersistence(),
-      section: this.section,
-      parents,
-      ...this.toPersistenceRootTypes(),
-    };
   }
 
   private ensuredParentIfMinor() {

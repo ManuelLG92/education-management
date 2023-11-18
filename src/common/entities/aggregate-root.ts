@@ -7,11 +7,11 @@ export type IBase = {
 };
 
 export abstract class AggregateRoot {
-  private _id: string;
+  private readonly _id: string;
   private readonly _createdAt: Date;
   protected _updatedAt?: Date;
-  protected constructor() {
-    this._id = IdGenerator.generate();
+  protected constructor(id?: string) {
+    this._id = id ?? IdGenerator.generate();
     this._createdAt = new Date();
     this._updatedAt = null;
   }
@@ -19,7 +19,6 @@ export abstract class AggregateRoot {
   get updatedAt(): Date {
     return this._updatedAt;
   }
-  abstract toPersistence(): any;
 
   get id(): string {
     return this._id;

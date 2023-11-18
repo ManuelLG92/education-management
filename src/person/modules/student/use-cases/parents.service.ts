@@ -1,37 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateStudentDto } from '../infra/controllers/dto/update-student.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
-import { ParentRepository } from '../infra/persistence/parent.repository';
-import { Parent } from '../domain/parent';
 import { CreatePersonDto } from '../../../create-person.dto';
+import { Parent } from '../infra/persistence/Parent';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class ParentsService {
   constructor(
-    @InjectRepository(ParentRepository)
-    private readonly repository: Repository<ParentRepository>,
+    @InjectRepository(Parent)
+    private readonly repository: EntityRepository<Parent>,
+    private readonly em: EntityManager,
   ) {}
-  async create(data: CreatePersonDto) {
-    const student = new Parent(data);
-    return this.repository.insert(student.toPersistence());
+  async create({ name, age, address }: CreatePersonDto) {
+    const student = new Parent(name, age, address);
+    await this.em.persistAndFlush(student);
   }
 
   async countByIds(ids: string[]) {
-    return this.repository.find({
-      where: {
-        id: In(ids),
-      },
-    });
+    return this.repository.count({ id: { $in: ids } });
   }
   async findAll() {
-    return this.repository.find();
+    return this.repository.findAll();
   }
 
   async findOne(id: string) {
-    return this.repository.findOne({
-      where: { id },
-    });
+    return this.repository.findOne({ id });
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {
@@ -39,7 +33,7 @@ export class ParentsService {
     return Promise.resolve({ id, updateStudentDto });
   }
 
-  async remove(id: number) {
-    await this.repository.delete(id);
+  async remove(id: string) {
+    await this.em.nativeDelete(Parent, id);
   }
 }

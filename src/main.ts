@@ -9,9 +9,9 @@ import { CourseService } from './school/modules/course/use-cases/course.service'
 import { SubjectService } from './school/modules/course/modules/subject/use-cases/subject.service';
 import { TeacherService } from './person/modules/teacher/use-cases/teacher.service';
 import { StudentService } from './person/modules/student/use-cases/student.service';
-import { faker } from '@faker-js/faker';
 import { SeasonService } from './school/modules/course/modules/season/use-cases/season.service';
 import { DataSource } from 'typeorm';
+import { defineConfig } from '@mikro-orm/postgresql';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +30,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  app.enableShutdownHooks();
   await app.listen(3000);
   Logger.log(`Server listening on port 3000`);
   const seed = async () => {
@@ -37,8 +39,8 @@ async function bootstrap() {
     await init.synchronize(true);
     const { school, section, course, subjects, season, student } = exec();
 
-    const ss = await app.resolve<SchoolService>(SchoolService);
-    const schoolCreated = await ss.create({
+    const schoolService = await app.resolve<SchoolService>(SchoolService);
+    const schoolCreated = await schoolService.create({
       name: school.name,
       address: school.address,
     });
@@ -56,18 +58,22 @@ async function bootstrap() {
 
     await seasonService.create({
       ...season,
-      school: schoolCreated,
-      courses: [courseCreated],
+      schoolId: schoolCreated.id,
+      coursesId: [courseCreated.id],
     });
     // console.log(seasonCreated);
 
     const subjectsService = await app.resolve<SubjectService>(SubjectService);
-    await subjectsService.create(
-      {
-        name: faker.person.firstName(),
-        teacherId: teacherCreated.id,
-      },
-      courseCreated,
+    await Promise.all(
+      subjects.map(async (it) =>
+        subjectsService.create(
+          {
+            name: it.name,
+            teacherId: teacherCreated.id,
+          },
+          courseCreated,
+        ),
+      ),
     );
 
     const sectionService = await app.resolve<SectionService>(SectionService);

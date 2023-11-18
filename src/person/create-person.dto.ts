@@ -17,9 +17,10 @@ export class AddressDto {
   @IsString()
   @ApiProperty()
   city: string;
-  @IsPositive()
+
+  @IsString()
   @ApiProperty()
-  cp: number;
+  postalCode: string;
   @IsString()
   @ApiProperty()
   country: string;

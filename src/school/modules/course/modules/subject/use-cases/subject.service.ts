@@ -1,21 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from '../infra/controllers/dto/create-subject.dto';
 import { UpdateSubjectDto } from '../infra/controllers/dto/update-subject.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { SubjectRepository } from '../infra/persistence/subject.repository';
-import { Subject } from '../domain/subject';
-import { CourseRepository } from '../../../infra/persistence/course.repository';
+import { EntityManager } from '@mikro-orm/core';
+import { Course } from '../../../infra/persistence/Course';
+import { Subject } from '../infra/persistence/Subject';
 
 @Injectable()
 export class SubjectService {
-  constructor(
-    @InjectRepository(SubjectRepository)
-    private readonly repository: Repository<SubjectRepository>,
-  ) {}
-  async create(data: CreateSubjectDto, teacher: CourseRepository) {
-    const entity = new Subject(data.name, teacher);
-    await this.repository.insert(entity.toPersistence());
+  constructor(private readonly em: EntityManager) {}
+  async create(data: CreateSubjectDto, course: Course) {
+    const entity = new Subject(data.name, course);
+    await this.em.persistAndFlush(entity);
     return entity;
   }
 

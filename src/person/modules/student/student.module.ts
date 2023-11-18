@@ -5,9 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { StudentRepository } from './infra/persistence/student.repository';
 import { ParentRepository } from './infra/persistence/parent.repository';
 import { ParentsService } from './use-cases/parents.service';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Student } from './infra/persistence/Student';
+import { Parent } from './infra/persistence/Parent';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StudentRepository, ParentRepository])],
+  imports: [
+    TypeOrmModule.forFeature([StudentRepository, ParentRepository]),
+    MikroOrmModule.forFeature([Student, Parent]),
+  ],
   controllers: [StudentController],
   providers: [StudentService, ParentsService],
   exports: [TypeOrmModule],
