@@ -1,5 +1,6 @@
 import { PrimaryKey, Property } from '@mikro-orm/core';
 import * as crypto from 'crypto';
+import { IdGenerator } from './id-generator';
 export class Base {
   @PrimaryKey({ length: 50, default: crypto.randomUUID() })
   id!: string;
@@ -23,7 +24,7 @@ export class Base {
     createdAt?: Date;
     updatedAt?: Date;
   } = {}) {
-    this.id = id ?? crypto.randomUUID();
+    this.id = id ?? IdGenerator.generate();
     this.createdAt = createdAt ?? new Date();
     this.updatedAt = updatedAt ?? new Date();
   }

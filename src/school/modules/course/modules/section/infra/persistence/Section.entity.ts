@@ -7,8 +7,6 @@ import {
 } from '@mikro-orm/core';
 import { CourseEntity } from '../../../../infra/persistence/Course.entity';
 import { Base } from '../../../../../../../common/entities/Base';
-// import { OneToMany } from 'typeorm';
-// import { SubjectEntity } from '../../../subject/infra/persistence/Subject.entity';
 import { StudentEntity } from '../../../../../../../person/modules/student/infra/persistence/Student.entity';
 
 @Entity()

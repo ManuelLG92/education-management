@@ -8,7 +8,6 @@ import {
 import { Base } from '../../../../../common/entities/Base';
 import { SeasonEntity } from '../../modules/season/infra/persistence/Season.entity';
 import { SectionEntity } from '../../modules/section/infra/persistence/Section.entity';
-// import { OneToMany } from 'typeorm';
 import { SubjectEntity } from '../../modules/subject/infra/persistence/Subject.entity';
 
 @Entity()

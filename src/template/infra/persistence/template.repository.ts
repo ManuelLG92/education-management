@@ -1,5 +1,5 @@
-import { BaseRepository } from '../../../common/entities/base.repository';
-import { Entity } from 'typeorm';
+import { Base } from '../../../common/entities/Base';
+import { Entity } from '@mikro-orm/core';
 
 @Entity()
-export class TemplateRepository extends BaseRepository {}
+export class TemplateRepository extends Base {}

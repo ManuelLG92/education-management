@@ -1,7 +1,6 @@
 import { AggregateRoot } from '../../../../../../common/entities/aggregate-root';
-import { SeasonRepository } from '../infra/persistence/season.repository';
 import { School } from '../../../../../domain/school';
-import { CourseRepository } from '../../../infra/persistence/course.repository';
+import { CourseEntity } from '../../../infra/persistence/Course.entity';
 
 export class Season extends AggregateRoot {
   constructor(
@@ -9,7 +8,7 @@ export class Season extends AggregateRoot {
     public readonly school: School,
     public readonly startAt: Date,
     public readonly endAt: Date,
-    public readonly courses: ReadonlyArray<CourseRepository>,
+    public readonly courses: ReadonlyArray<CourseEntity>,
   ) {
     super();
   }

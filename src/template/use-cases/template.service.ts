@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTemplateDto } from '../infra/controllers/dto/create-template.dto';
 import { UpdateTemplateDto } from '../infra/controllers/dto/update-template.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { TemplateRepository } from '../infra/persistence/template.repository';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class TemplateService {
   constructor(
     @InjectRepository(TemplateRepository)
-    private readonly repository: Repository<TemplateRepository>,
+    private readonly repository: EntityRepository<TemplateRepository>,
   ) {}
   async create({}: CreateTemplateDto) {
     throw new Error('Not implemented yet');

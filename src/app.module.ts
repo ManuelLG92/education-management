@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchoolModule } from './school/school.module';
 import { PersonModule } from './person/person.module';
-// import { TypeOrmModule } from '@nestjs/typeorm';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ReflectMetadataProvider } from '@mikro-orm/core';
 
