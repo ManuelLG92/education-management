@@ -10,9 +10,9 @@ const mikroOrmConfig: Options = {
   dbName: 'edu',
   metadataProvider: ReflectMetadataProvider,
   // entities: ['./src/**/persistence/*.repository.js'],
-  entities: ['./**/persistence/*.repositorymk.js'],
+  entities: ['./src/**/persistence/*entity.js'],
   // entitiesTs: ['./dist/**/persistence/*.repository.ts'],
-  entitiesTs: ['./**/persistence/*.repositorymk.ts'],
+  entitiesTs: ['./src/**/persistence/*entity.ts'],
 };
 
 export default mikroOrmConfig;

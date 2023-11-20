@@ -37,6 +37,6 @@ export class SchoolController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.schoolService.remove(+id);
+    return this.schoolService.remove(id);
   }
 }

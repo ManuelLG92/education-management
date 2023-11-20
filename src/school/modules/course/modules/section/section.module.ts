@@ -1,26 +1,16 @@
 import { Module } from '@nestjs/common';
 import { SectionService } from './use-cases/section.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SectionRepository } from './infra/persistence/section.repository';
 import { SectionController } from './infra/controllers/section.controller';
-import { CourseRepository } from '../../infra/persistence/course.repository';
-import { StudentRepository } from '../../../../../person/modules/student/infra/persistence/student.repository';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Section } from './infra/persistence/Section';
-import { Student } from '../../../../../person/modules/student/infra/persistence/Student';
-import { Course } from '../../infra/persistence/Course';
+import { SectionEntity } from './infra/persistence/Section.entity';
+import { StudentEntity } from '../../../../../person/modules/student/infra/persistence/Student.entity';
+import { CourseEntity } from '../../infra/persistence/Course.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      SectionRepository,
-      StudentRepository,
-      CourseRepository,
-    ]),
-    MikroOrmModule.forFeature([Section, Student, Course]),
+    MikroOrmModule.forFeature([SectionEntity, StudentEntity, CourseEntity]),
   ],
   controllers: [SectionController],
   providers: [SectionService],
-  exports: [TypeOrmModule],
 })
 export class SectionModule {}

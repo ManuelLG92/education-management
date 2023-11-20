@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from '../infra/controllers/dto/create-subject.dto';
 import { UpdateSubjectDto } from '../infra/controllers/dto/update-subject.dto';
 import { EntityManager } from '@mikro-orm/core';
-import { Course } from '../../../infra/persistence/Course';
-import { Subject } from '../infra/persistence/Subject';
+import { CourseEntity } from '../../../infra/persistence/Course.entity';
+import { SubjectEntity } from '../infra/persistence/Subject.entity';
 
 @Injectable()
 export class SubjectService {
   constructor(private readonly em: EntityManager) {}
-  async create(data: CreateSubjectDto, course: Course) {
-    const entity = new Subject(data.name, course);
+  async create(data: CreateSubjectDto, course: CourseEntity) {
+    const entity = new SubjectEntity(data.name, course);
     await this.em.persistAndFlush(entity);
     return entity;
   }

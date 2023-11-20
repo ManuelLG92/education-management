@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchoolModule } from './school/school.module';
 import { PersonModule } from './person/person.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { ReflectMetadataProvider } from '@mikro-orm/core';
 
 @Module({
   imports: [
@@ -13,22 +14,29 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
       host: '127.0.0.1',
       port: 5432,
       name: 'root',
+      user: 'root',
       password: 'root',
       dbName: 'edu',
       // entities: ['./src/**/persistence/*.repository.js'],
-      entities: ['./**/persistence/*.repositorymk.js'],
+      entities: ['./**/persistence/*entity.js'],
       // entitiesTs: ['./dist/**/persistence/*.repository.ts'],
-      entitiesTs: ['./**/persistence/*.repositorymk.ts'],
+      entitiesTs: ['./**/persistence/*entity.ts'],
+      metadataProvider: ReflectMetadataProvider,
+      debug: true,
+      seeder: {
+        path: './fixtures',
+        defaultSeeder: 'SchoolFixtures',
+      },
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: '127.0.0.1',
-      port: 5432,
-      username: 'root',
-      password: 'root',
-      database: 'edu',
-      logging: true,
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   host: '127.0.0.1',
+    //   port: 5432,
+    //   username: 'root',
+    //   password: 'root',
+    //   database: 'edu',
+    //   logging: true,
+    // }),
     SchoolModule,
     PersonModule,
   ],

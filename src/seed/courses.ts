@@ -1,29 +1,30 @@
 import { faker } from '@faker-js/faker';
 import { PersonRoles } from '../person/domain/person';
-import { Section } from '../school/modules/course/modules/section/infra/persistence/Section';
-import { Subject } from '../school/modules/course/modules/subject/infra/persistence/Subject';
-import { Season } from '../school/modules/course/modules/season/infra/persistence/Season';
-import { School } from '../school/infra/persistence/School';
-import { Course } from '../school/modules/course/infra/persistence/Course';
-import { Student } from '../person/modules/student/infra/persistence/Student';
+import { SectionEntity } from '../school/modules/course/modules/section/infra/persistence/Section.entity';
+import { SubjectEntity } from '../school/modules/course/modules/subject/infra/persistence/Subject.entity';
+import { SeasonEntity } from '../school/modules/course/modules/season/infra/persistence/Season.entity';
+import { SchoolEntity } from '../school/infra/persistence/School.entity';
+import { CourseEntity } from '../school/modules/course/infra/persistence/Course.entity';
+import { StudentEntity } from '../person/modules/student/infra/persistence/Student.entity';
 import { Collection } from '@mikro-orm/core';
+import { TeacherEntity } from '../person/modules/teacher/infra/persistence/Teacher.entity';
 
 const repeaterFactory = <T>(times: number = 10, handler: () => T): Array<T> => {
   return Array.from({ length: times }, () => handler());
 };
 
 export const exec = () => {
-  const subject = (): Subject => ({
+  const subject = (): SubjectEntity => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
     createdAt: new Date(),
     course: null,
   });
   const availableSubjects = repeaterFactory(10, () => subject());
-  const school = (seasons: Season[] = []): School => ({
+  const school = (seasons: SeasonEntity[] = []): SchoolEntity => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
-    seasons: new Collection<Season, object>(seasons),
+    seasons: new Collection<SeasonEntity>(seasons),
     createdAt: new Date(),
     address: {
       city: faker.location.city(),
@@ -32,38 +33,45 @@ export const exec = () => {
       street: faker.location.streetAddress(),
       postalCode: faker.number.int({ max: 3000 }).toString(10),
     },
+    teachers: new Collection<TeacherEntity, object>(null),
   });
 
-  const season = (school: School, courses: Course[]): Season => ({
+  const season = (
+    school: SchoolEntity,
+    courses: CourseEntity[],
+  ): SeasonEntity => ({
     id: faker.string.uuid(),
     name: faker.commerce.isbn(),
     school: school,
-    courses: new Collection<Course>(courses),
+    courses: new Collection<CourseEntity>(courses),
     startAt: new Date(),
     endAt: faker.date.future(),
     createdAt: new Date(),
   });
 
   const course = (
-    sections: Section[] = [],
-    seasons: Season[] = [],
-  ): Course => ({
+    sections: SectionEntity[] = [],
+    seasons: SeasonEntity[] = [],
+  ): CourseEntity => ({
     id: faker.string.uuid(),
     name: faker.person.firstName(),
-    sections: new Collection<Section, object>(sections),
-    seasons: new Collection<Season, object>(seasons),
-    subjects: new Collection<Subject, object>(availableSubjects),
+    sections: new Collection<SectionEntity>(sections),
+    seasons: new Collection<SeasonEntity>(seasons),
+    subjects: new Collection<SubjectEntity>(availableSubjects),
     createdAt: new Date(),
   });
-  const section = (courses: Course[], students: Student[]): Section => ({
+  const section = (
+    courses: CourseEntity[],
+    students: StudentEntity[],
+  ): SectionEntity => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
-    course: new Collection<Course, object>(courses),
-    students: new Collection<Student, object>(students),
+    courses: new Collection<CourseEntity>(courses),
+    students: new Collection<StudentEntity>(students),
     createdAt: new Date(),
   });
 
-  const student = (section: Section) => ({
+  const student = (section: SectionEntity) => ({
     id: faker.string.uuid(),
     createdAt: new Date(),
     name: faker.person.firstName(),
@@ -76,7 +84,7 @@ export const exec = () => {
       country: faker.location.country(),
       state: faker.location.state(),
       street: faker.location.streetAddress(),
-      postalCode: faker.number.int({ max: 3000 }),
+      postalCode: faker.number.int({ max: 3000 }).toString(),
     },
   });
 
@@ -85,7 +93,7 @@ export const exec = () => {
   // school1.seasons = [season1];
   const section1 = section([], []);
   const course1 = course([section1], [season1]);
-  section1.course = new Collection<Course>(course1);
+  section1.courses = new Collection<CourseEntity>(course1);
   const student1 = student(section1);
   // section1.students = [student1];
   // console.log('school', school1);

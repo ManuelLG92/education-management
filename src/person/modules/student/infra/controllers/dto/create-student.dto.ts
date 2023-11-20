@@ -8,7 +8,6 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { SectionRepository } from 'src/school/modules/course/modules/section/infra/persistence/section.repository';
 
 interface IStudentDto {
   schoolId: string;
@@ -25,10 +24,6 @@ export class CreateStudentDto extends CreatePersonDto implements IStudentDto {
   @Type(() => CreatePersonDto)
   @ApiProperty()
   person: CreatePersonDto;
-
-  @ValidateNested({ each: true })
-  @Type(() => CreatePersonDto)
-  section: SectionRepository;
 
   @IsUUID('4')
   sectionId: string;

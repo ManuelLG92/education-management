@@ -1,42 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSchoolDto } from '../infra/controllers/dto/create-school.dto';
 import { UpdateSchoolDto } from '../infra/controllers/dto/update-school.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { SchoolRepository } from '../infra/persistence/school.repository';
-import { School } from '../domain/school';
-import { Address } from '../../person/infra/persistence/Address';
+import { AddressEntity } from '../../person/infra/persistence/Address.entity';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { SchoolEntity } from '../infra/persistence/School.entity';
 
 @Injectable()
 export class SchoolService {
   constructor(
-    @InjectRepository(SchoolRepository)
-    private readonly repository: Repository<SchoolRepository>,
+    @InjectRepository(SchoolEntity)
+    private readonly repository: EntityRepository<SchoolEntity>,
+    private readonly em: EntityManager,
   ) {}
   async create({ name, address }: CreateSchoolDto) {
     const { city, country, postalCode, state, street } = address;
-    const school = new School(
+    const school = new SchoolEntity(
       name,
-      new Address(city, country, postalCode.toString(), state, street),
-      [],
+      new AddressEntity(city, country, postalCode.toString(), state, street),
     );
-    await this.repository.insert(school);
+    await this.em.persistAndFlush(school);
     return school;
   }
 
   async findAll() {
-    return this.repository.find({
-      relations: {
-        seasons: true,
-      },
+    return this.repository.findAll({
+      populate: ['seasons'],
     });
   }
 
   async findOne(id: string) {
-    const result = await this.repository.findOne({
-      where: { id },
-      relations: { seasons: true },
-    });
+    const result = await this.repository.findOne(
+      {
+        id,
+      },
+      {
+        populate: ['seasons'],
+      },
+    );
 
     return {
       id: result.id,
@@ -49,10 +50,10 @@ export class SchoolService {
   }
 
   async update(id: string, updateSchoolDto: UpdateSchoolDto) {
-    return this.repository.update({ id }, updateSchoolDto);
+    return this.repository.nativeUpdate({ id }, updateSchoolDto);
   }
 
-  async remove(id: number) {
-    await this.repository.delete(id);
+  async remove(id: string) {
+    await this.repository.nativeDelete({ id });
   }
 }

@@ -8,7 +8,7 @@ export interface IAddress {
   country: string;
 }
 @Embeddable()
-export class Address implements IAddress {
+export class AddressEntity implements IAddress {
   @Property()
   city!: string;
 

@@ -1,33 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCourseDto } from '../infra/controllers/dto/create-course.dto';
 import { UpdateCourseDto } from '../infra/controllers/dto/update-course.dto';
-import { Collection, EntityManager } from '@mikro-orm/core';
-import { Subject } from '../modules/subject/infra/persistence/Subject';
-import { Season } from '../modules/season/infra/persistence/Season';
-import { Course } from '../infra/persistence/Course';
-import { Section } from '../modules/section/infra/persistence/Section';
+import { EntityManager } from '@mikro-orm/core';
+import { SubjectEntity } from '../modules/subject/infra/persistence/Subject.entity';
+import { SeasonEntity } from '../modules/season/infra/persistence/Season.entity';
+import { CourseEntity } from '../infra/persistence/Course.entity';
+// import { SectionEntity } from '../modules/section/infra/persistence/Section.entity';
 
 @Injectable()
 export class CourseService {
   constructor(private readonly em: EntityManager) {}
   async create(
     data: CreateCourseDto,
-    subjects: Array<Subject>,
-    seasons: Array<Season>,
+    subjects: Array<SubjectEntity>,
+    seasons: Array<SeasonEntity>,
   ) {
-    const entity = new Course(
-      data.name,
-      new Collection<Season>(seasons),
-      new Collection<Section>([]),
-      new Collection<Subject>(subjects),
-    );
+    const entity = new CourseEntity(data.name);
+    entity.seasons.add(seasons);
+    entity.subjects.add(subjects);
     await this.em.persistAndFlush(entity);
-    return this.findOne(entity.id);
+    return entity;
   }
 
   async findAll() {
     return this.em.find(
-      Course,
+      CourseEntity,
       {},
       {
         populate: ['subjects', 'seasons', 'sections'],
@@ -37,7 +34,7 @@ export class CourseService {
 
   async findOne(id: string) {
     return this.em.findOne(
-      Course,
+      CourseEntity,
       { id },
       { populate: ['subjects', 'seasons', 'sections'] },
     );

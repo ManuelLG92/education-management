@@ -7,14 +7,14 @@ import {
 import { IBase } from '../../../../common/entities/aggregate-root';
 import { BadRequestException } from '@nestjs/common';
 import { IParentInput, Parent } from './parent';
-import { Section } from '../../../../school/modules/course/modules/section/infra/persistence/Section';
+import { SectionEntity } from '../../../../school/modules/course/modules/section/infra/persistence/Section.entity';
 
 type IBaseStudent = {
-  section: Section;
+  section: SectionEntity;
 };
 export type IStudentOutput = {
   parents: ReadonlyArray<IPersonOut>;
-  section: Section;
+  section: SectionEntity;
 } & IBaseStudent &
   IPersonOut &
   IBase;
@@ -25,7 +25,7 @@ export type IStudentInput = {
   IBaseStudent;
 
 export class Student extends Person {
-  public readonly section: Section;
+  public readonly section: SectionEntity;
   protected readonly role: PersonRoles;
   protected readonly parents: Array<Parent>;
   constructor({ parents, ...rest }: IStudentInput) {

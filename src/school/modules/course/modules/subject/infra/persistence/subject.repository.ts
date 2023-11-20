@@ -1,13 +1,13 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseRepository } from '../../../../../../../common/entities/base.repository';
-import { Course } from '../../../../infra/persistence/Course';
+import { CourseEntity } from '../../../../infra/persistence/Course.entity';
 
 @Entity('subject-old')
 export class SubjectRepository extends BaseRepository {
   @Column({ type: 'varchar', length: 100 })
   name: string;
 
-  // @ManyToOne(() => Course, (s) => s.subjects)
-  @ManyToOne(() => Course)
-  course: Course;
+  // @ManyToOne(() => CourseEntity, (s) => s.subjects)
+  @ManyToOne(() => CourseEntity)
+  course: CourseEntity;
 }

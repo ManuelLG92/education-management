@@ -1,10 +1,9 @@
-import { Embedded, Entity, Property } from '@mikro-orm/core';
+import { Embedded, Property } from '@mikro-orm/core';
 import { Base } from '../../../common/entities/Base';
-import { Address } from './Address';
+import { AddressEntity } from './Address.entity';
 import { PersonRoles } from '../../domain/person';
 
-@Entity()
-export class Person extends Base {
+export class PersonEntity extends Base {
   @Property({ length: 100 })
   name!: string;
 
@@ -14,10 +13,15 @@ export class Person extends Base {
   @Property({ length: 100, nullable: false })
   role: string;
 
-  @Embedded(() => Address)
-  address!: Address;
+  @Embedded(() => AddressEntity)
+  address!: AddressEntity;
 
-  constructor(name: string, age: number, role: PersonRoles, address: Address) {
+  constructor(
+    name: string,
+    age: number,
+    role: PersonRoles,
+    address: AddressEntity,
+  ) {
     super();
     this.name = name;
     this.age = age;

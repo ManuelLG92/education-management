@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from '../infra/controllers/dto/create-teacher.dto';
 import { UpdateTeacherDto } from '../infra/controllers/dto/update-teacher.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { TeacherRepository } from '../infra/persistence/teacher.repository';
-import { Teacher } from '../domain/teacher';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { TeacherEntity } from '../infra/persistence/Teacher.entity';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { SchoolEntity } from '../../../../school/infra/persistence/School.entity';
 
 @Injectable()
 export class TeacherService {
   constructor(
-    @InjectRepository(TeacherRepository)
-    private readonly repository: Repository<TeacherRepository>,
+    @InjectRepository(TeacherEntity)
+    private readonly repository: EntityRepository<TeacherEntity>,
+    private readonly em: EntityManager,
   ) {}
-  async create(data: CreateTeacherDto, schoolId: string) {
-    const entity = new Teacher({ person: data, schoolId });
-    await this.repository.insert(entity);
+  async create({ name, address, age }: CreateTeacherDto, schoolId: string) {
+    const school = await this.em.findOne(SchoolEntity, { id: schoolId });
+    const entity = new TeacherEntity(name, age, address, school);
+    await this.repository.nativeInsert(entity);
     return entity;
   }
 

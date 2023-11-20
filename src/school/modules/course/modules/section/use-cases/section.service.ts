@@ -2,25 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { CreateSectionDto } from '../infra/controllers/dto/create-section.dto';
 import { UpdateSectionDto } from '../infra/controllers/dto/update-section.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Section } from '../domain/section';
-import { EntityRepository } from '@mikro-orm/core';
-import { Course } from '../../../infra/persistence/Course';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { SectionEntity } from '../infra/persistence/Section.entity';
 
 @Injectable()
 export class SectionService {
   constructor(
-    @InjectRepository(Section)
-    private readonly repository: EntityRepository<Section>,
+    @InjectRepository(SectionEntity)
+    private readonly repository: EntityRepository<SectionEntity>,
+    private readonly em: EntityManager,
   ) {}
-  async create(data: CreateSectionDto, course: Array<Course>) {
-    const section = new Section(data.name, course, []);
-    await this.repository.getEntityManager().persistAndFlush(section);
+  async create(data: CreateSectionDto) {
+    const section = new SectionEntity(data.name);
+    await this.em.persistAndFlush(section);
     return section;
   }
 
   async findAll() {
     return this.repository.findAll({
-      populate: ['course', 'students'],
+      populate: ['courses', 'students'],
     });
   }
 

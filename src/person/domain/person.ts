@@ -1,6 +1,5 @@
 import { AggregateRoot } from '../../common/entities/aggregate-root';
-import { ParentRepository } from '../modules/student/infra/persistence/parent.repository';
-import { IAddress } from '../infra/persistence/Address';
+import { IAddress } from '../infra/persistence/Address.entity';
 import { Address } from './address';
 
 export type IPersonOut = {
@@ -33,15 +32,5 @@ export abstract class Person extends AggregateRoot {
     this.age = age;
     this.name = name;
     this.role = role;
-  }
-
-  toPersistence(): ParentRepository {
-    return {
-      name: this.name,
-      age: this.age,
-      role: this.role,
-      address: this.address.toPersistence(),
-      ...this.toPersistenceRootTypes(),
-    };
   }
 }

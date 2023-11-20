@@ -15,5 +15,5 @@ export class AddressRepository implements IAddress {
   country: string;
 
   @Column({ type: 'int' })
-  cp: number;
+  cp: string;
 }

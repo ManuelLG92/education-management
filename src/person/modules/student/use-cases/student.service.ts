@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateStudentDto } from '../infra/controllers/dto/create-student.dto';
 import { UpdateStudentDto } from '../infra/controllers/dto/update-student.dto';
-import { Collection, EntityManager, EntityRepository } from '@mikro-orm/core';
-import { Student as NewStudent } from '../infra/persistence/Student';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { StudentEntity as NewStudent } from '../infra/persistence/Student.entity';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Section } from '../../../../school/modules/course/modules/section/infra/persistence/Section';
-import { Parent } from '../infra/persistence/Parent';
+import { SectionEntity } from '../../../../school/modules/course/modules/section/infra/persistence/Section.entity';
+import { ParentEntity } from '../infra/persistence/Parent.entity';
 
 @Injectable()
 export class StudentService {
@@ -20,7 +20,7 @@ export class StudentService {
   async create(data: CreateStudentDto) {
     const parentsId = data.parentsId;
     const parentsFound = await this.em.find(
-      Parent,
+      ParentEntity,
       {
         id: { $in: parentsId },
       },
@@ -30,15 +30,11 @@ export class StudentService {
     if (parentsId.length !== parentsFound.length) {
       throw new BadRequestException('Some parent does not exist');
     }
-    const section = await this.em.findOne(Section, { id: data.sectionId });
-    const parentCollection = new Collection<Parent>(parentsFound);
-    const student = new NewStudent(
-      data.name,
-      data.age,
-      data.address,
-      section,
-      parentCollection,
-    );
+    const section = await this.em.findOne(SectionEntity, {
+      id: data.sectionId,
+    });
+    const student = new NewStudent(data.name, data.age, data.address, section);
+    parentsFound.forEach((parent) => student.parents.add(parent));
     await this.em.persistAndFlush(student);
     return student;
   }
