@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateStudentDto } from '../infra/controllers/dto/update-student.dto';
-import { CreatePersonDto } from '../../../create-person.dto';
-import { ParentEntity } from '../infra/persistence/Parent.entity';
+import { UpdateStudentDto } from '../controllers/dto/update-student.dto';
+import { CreatePersonDto } from '../../../request-dto/create-person.dto';
+import { Parent } from '../entity/parent';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class ParentsService {
   constructor(
-    @InjectRepository(ParentEntity)
-    private readonly repository: EntityRepository<ParentEntity>,
+    @InjectRepository(Parent)
+    private readonly repository: EntityRepository<Parent>,
     private readonly em: EntityManager,
   ) {}
-  async create({ name, age, address }: CreatePersonDto) {
-    const student = new ParentEntity(name, age, address);
-    await this.em.persistAndFlush(student);
+  async create(data: CreatePersonDto) {
+    const parentEntity = new Parent(data);
+    await this.em.persistAndFlush(parentEntity);
   }
 
   async countByIds(ids: string[]) {
@@ -34,6 +34,6 @@ export class ParentsService {
   }
 
   async remove(id: string) {
-    await this.em.nativeDelete(ParentEntity, id);
+    await this.em.nativeDelete(Parent, id);
   }
 }

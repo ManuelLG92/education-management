@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MikroORM } from '@mikro-orm/core';
-import { SchoolFixtures } from './fixtures/SchoolFixtures';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,10 +28,10 @@ async function bootstrap() {
 
   const init = await app.resolve(MikroORM);
   const generator = init.getSchemaGenerator();
-  await generator.dropSchema();
-  await generator.createSchema();
-
-  const seeder = init.getSeeder();
-  await seeder.seed(SchoolFixtures);
+  // await generator.dropSchema();
+  await generator.updateSchema();
+  //
+  // const seeder = init.getSeeder();
+  // await seeder.seed(SchoolFixtures);
 }
 bootstrap().catch((error) => console.log(`Failed to start server: ${error}`));

@@ -1,24 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSchoolDto } from '../infra/controllers/dto/create-school.dto';
-import { UpdateSchoolDto } from '../infra/controllers/dto/update-school.dto';
-import { AddressEntity } from '../../person/infra/persistence/Address.entity';
+import { CreateSchoolDto } from '../controllers/dto/create-school.dto';
+import { UpdateSchoolDto } from '../controllers/dto/update-school.dto';
+import { Address } from '../../person/entity/address';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
-import { SchoolEntity } from '../infra/persistence/School.entity';
+import { School } from '../entity/school';
 
 @Injectable()
 export class SchoolService {
   constructor(
-    @InjectRepository(SchoolEntity)
-    private readonly repository: EntityRepository<SchoolEntity>,
+    @InjectRepository(School)
+    private readonly repository: EntityRepository<School>,
     private readonly em: EntityManager,
   ) {}
   async create({ name, address }: CreateSchoolDto) {
-    const { city, country, postalCode, state, street } = address;
-    const school = new SchoolEntity(
+    const school = new School({
       name,
-      new AddressEntity(city, country, postalCode.toString(), state, street),
-    );
+      address: new Address(address),
+      seasons: [],
+      teachers: [],
+    });
     await this.em.persistAndFlush(school);
     return school;
   }

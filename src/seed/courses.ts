@@ -1,30 +1,30 @@
 import { faker } from '@faker-js/faker';
-import { PersonRoles } from '../person/domain/person';
-import { SectionEntity } from '../school/modules/course/modules/section/infra/persistence/Section.entity';
-import { SubjectEntity } from '../school/modules/course/modules/subject/infra/persistence/Subject.entity';
-import { SeasonEntity } from '../school/modules/course/modules/season/infra/persistence/Season.entity';
-import { SchoolEntity } from '../school/infra/persistence/School.entity';
-import { CourseEntity } from '../school/modules/course/infra/persistence/Course.entity';
-import { StudentEntity } from '../person/modules/student/infra/persistence/Student.entity';
+import { Section } from '../school/modules/course/modules/section/entity/section';
+import { Subject } from '../school/modules/course/modules/subject/entity/subject';
+import { Season } from '../school/modules/course/modules/season/entity/season';
+import { Course } from '../school/modules/course/entity/course';
+import { Student } from '../person/modules/student/entity/student';
 import { Collection } from '@mikro-orm/core';
-import { TeacherEntity } from '../person/modules/teacher/infra/persistence/Teacher.entity';
+import { TeacherEntity } from '../person/modules/teacher/entity/Teacher.entity';
+import { PersonRoles } from '../person/entity/person';
+import { School } from '../school/entity/school';
 
 const repeaterFactory = <T>(times: number = 10, handler: () => T): Array<T> => {
   return Array.from({ length: times }, () => handler());
 };
 
 export const exec = () => {
-  const subject = (): SubjectEntity => ({
+  const subject = (): Subject => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
     createdAt: new Date(),
     course: null,
   });
   const availableSubjects = repeaterFactory(10, () => subject());
-  const school = (seasons: SeasonEntity[] = []): SchoolEntity => ({
+  const school = (seasons: Season[] = []): School => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
-    seasons: new Collection<SeasonEntity>(seasons),
+    seasons: new Collection<Season>(seasons),
     createdAt: new Date(),
     address: {
       city: faker.location.city(),
@@ -36,42 +36,36 @@ export const exec = () => {
     teachers: new Collection<TeacherEntity, object>(null),
   });
 
-  const season = (
-    school: SchoolEntity,
-    courses: CourseEntity[],
-  ): SeasonEntity => ({
+  const season = (school: School, courses: Course[]): Season => ({
     id: faker.string.uuid(),
     name: faker.commerce.isbn(),
     school: school,
-    courses: new Collection<CourseEntity>(courses),
+    courses: new Collection<Course>(courses),
     startAt: new Date(),
     endAt: faker.date.future(),
     createdAt: new Date(),
   });
 
   const course = (
-    sections: SectionEntity[] = [],
-    seasons: SeasonEntity[] = [],
-  ): CourseEntity => ({
+    sections: Section[] = [],
+    seasons: Season[] = [],
+  ): Course => ({
     id: faker.string.uuid(),
     name: faker.person.firstName(),
-    sections: new Collection<SectionEntity>(sections),
-    seasons: new Collection<SeasonEntity>(seasons),
-    subjects: new Collection<SubjectEntity>(availableSubjects),
+    sections: new Collection<Section>(sections),
+    seasons: new Collection<Season>(seasons),
+    subjects: new Collection<Subject>(availableSubjects),
     createdAt: new Date(),
   });
-  const section = (
-    courses: CourseEntity[],
-    students: StudentEntity[],
-  ): SectionEntity => ({
+  const section = (courses: Course[], students: Student[]): Section => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
-    courses: new Collection<CourseEntity>(courses),
-    students: new Collection<StudentEntity>(students),
+    courses: new Collection<Course>(courses),
+    students: new Collection<Student>(students),
     createdAt: new Date(),
   });
 
-  const student = (section: SectionEntity) => ({
+  const student = (section: Section) => ({
     id: faker.string.uuid(),
     createdAt: new Date(),
     name: faker.person.firstName(),
@@ -93,7 +87,7 @@ export const exec = () => {
   // school1.seasons = [season1];
   const section1 = section([], []);
   const course1 = course([section1], [season1]);
-  section1.courses = new Collection<CourseEntity>(course1);
+  section1.courses = new Collection<Course>(course1);
   const student1 = student(section1);
   // section1.students = [student1];
   // console.log('school', school1);

@@ -1,27 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSeasonDto } from '../infra/controllers/dto/create-season.dto';
-import { UpdateSeasonDto } from '../infra/controllers/dto/update-season.dto';
+import { CreateSeasonDto } from '../controllers/dto/create-season.dto';
+import { UpdateSeasonDto } from '../controllers/dto/update-season.dto';
 import { EntityManager } from '@mikro-orm/core';
-import { SeasonEntity } from '../infra/persistence/Season.entity';
-import { SchoolEntity } from '../../../../../infra/persistence/School.entity';
-import { CourseEntity } from '../../../infra/persistence/Course.entity';
+import { Season } from '../entity/season';
+import { Course } from '../../../entity/course';
+import { School } from '../../../../../entity/school';
 
 @Injectable()
 export class SeasonService {
   constructor(private readonly em: EntityManager) {}
-  async create(data: CreateSeasonDto) {
-    const school = await this.em.findOneOrFail(SchoolEntity, {
-      id: data.schoolId,
+  async create({ name, coursesId, startAt, schoolId, endAt }: CreateSeasonDto) {
+    const school = await this.em.findOneOrFail(School, {
+      id: schoolId,
     });
-    const courses = await this.em.find(CourseEntity, {
-      id: { $in: data.coursesId },
+    const courses = await this.em.find(Course, {
+      id: { $in: coursesId },
     });
-    const season = new SeasonEntity(
-      data.name,
-      data.startAt,
-      data.endAt,
-      school,
-    );
+    const season = new Season({ name, courses, school, startAt, endAt });
     season.courses.add(courses);
     await this.em.insert(season);
     return season;
@@ -29,7 +24,7 @@ export class SeasonService {
 
   async findAll() {
     return this.em.find(
-      SeasonEntity,
+      Season,
       {},
       {
         populate: ['school', 'courses'],

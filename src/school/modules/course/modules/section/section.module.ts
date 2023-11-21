@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { SectionService } from './use-cases/section.service';
-import { SectionController } from './infra/controllers/section.controller';
+import { SectionController } from './controllers/section.controller';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { SectionEntity } from './infra/persistence/Section.entity';
-import { StudentEntity } from '../../../../../person/modules/student/infra/persistence/Student.entity';
-import { CourseEntity } from '../../infra/persistence/Course.entity';
+import { Section } from './entity/section';
+import { Student } from '../../../../../person/modules/student/entity/student';
+import { Course } from '../../entity/course';
 
 @Module({
-  imports: [
-    MikroOrmModule.forFeature([SectionEntity, StudentEntity, CourseEntity]),
-  ],
+  imports: [MikroOrmModule.forFeature([Section, Student, Course])],
   controllers: [SectionController],
   providers: [SectionService],
 })

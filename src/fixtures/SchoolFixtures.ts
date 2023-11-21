@@ -1,21 +1,21 @@
-import { SchoolEntity } from '../school/infra/persistence/School.entity';
 import { faker } from '@faker-js/faker';
 import { EntityManager } from '@mikro-orm/core';
-import { SeasonEntity } from '../school/modules/course/modules/season/infra/persistence/Season.entity';
+import { Season } from '../school/modules/course/modules/season/entity/season';
 import { Seeder } from '@mikro-orm/seeder';
-import { CourseEntity } from '../school/modules/course/infra/persistence/Course.entity';
-import { SectionEntity } from '../school/modules/course/modules/section/infra/persistence/Section.entity';
-import { StudentEntity } from '../person/modules/student/infra/persistence/Student.entity';
-import { PersonRoles } from '../person/domain/person';
-import { SubjectEntity } from '../school/modules/course/modules/subject/infra/persistence/Subject.entity';
-import { TeacherEntity } from '../person/modules/teacher/infra/persistence/Teacher.entity';
+import { Course } from '../school/modules/course/entity/course';
+import { Section } from '../school/modules/course/modules/section/entity/section';
+import { Student } from '../person/modules/student/entity/student';
+import { Subject } from '../school/modules/course/modules/subject/entity/subject';
+import { TeacherEntity } from '../person/modules/teacher/entity/Teacher.entity';
+import { PersonRoles } from '../person/entity/person';
+import { School } from '../school/entity/school';
 const repeaterFactory = <T>(times: number = 10, handler: () => T): Array<T> => {
   return Array.from({ length: times }, () => handler());
 };
 export class SchoolFixtures extends Seeder {
   async run(em: EntityManager): Promise<void> {
     try {
-      const student = (section: SectionEntity) => ({
+      const student = (section: Section) => ({
         id: faker.string.uuid(),
         createdAt: new Date(),
         name: faker.person.firstName(),
@@ -32,24 +32,34 @@ export class SchoolFixtures extends Seeder {
         },
       });
 
-      const schoolEntity = new SchoolEntity(faker.company.name(), {
-        city: faker.location.city(),
-        country: faker.location.country(),
-        state: faker.location.state(),
-        street: faker.location.streetAddress(),
-        postalCode: faker.number.int({ max: 3000 }).toString(10),
+      const schoolEntity = new School({
+        address: {
+          city: faker.location.city(),
+          country: faker.location.country(),
+          state: faker.location.state(),
+          street: faker.location.streetAddress(),
+          postalCode: faker.number.int({ max: 3000 }).toString(10),
+        },
+        name: faker.company.name(),
+        seasons: [],
+        teachers: [],
       });
       em.persist(schoolEntity);
-      const seasonEntity = new SeasonEntity(
-        faker.commerce.isbn(),
-        new Date(),
-        new Date(),
-        schoolEntity,
-      );
+      const seasonEntity = new Season({
+        name: faker.commerce.isbn(),
+        startAt: new Date(),
+        endAt: new Date(),
+        school: schoolEntity,
+        courses: [],
+      });
       em.persist(seasonEntity);
-      const section1 = new SectionEntity(faker.person.firstName());
+      const section1 = new Section({
+        name: faker.person.firstName(),
+        students: [],
+        courses: [],
+      });
 
-      const subject = (): SubjectEntity => ({
+      const subject = (): Subject => ({
         id: faker.string.uuid(),
         name: faker.company.name(),
         createdAt: new Date(),
@@ -57,38 +67,47 @@ export class SchoolFixtures extends Seeder {
       });
 
       em.persist(section1);
-      const courseEntity = new CourseEntity(faker.person.firstName());
+      const courseEntity = new Course({
+        name: faker.person.firstName(),
+        sections: [section1],
+        subjects: [],
+        seasons: [],
+      });
       courseEntity.sections.add(section1);
       em.persist(courseEntity);
 
       const availableSubjects = repeaterFactory(10, () => subject());
       availableSubjects.forEach((item) => {
-        const subjectEntity = new SubjectEntity(item.name, courseEntity);
+        const subjectEntity = new Subject({
+          name: item.name,
+          course: courseEntity,
+        });
         em.persist(subjectEntity);
       });
       seasonEntity.courses.add(courseEntity);
       em.persist(seasonEntity);
       const studentData = student(section1);
-      const studentEntity = new StudentEntity(
-        studentData.name,
-        studentData.age,
-        studentData.address,
-        section1,
-      );
+      const studentEntity = new Student({
+        name: studentData.name,
+        age: 20,
+        address: studentData.address,
+        section: section1,
+        parents: [],
+      });
       em.persist(studentEntity);
 
-      const teacher = new TeacherEntity(
-        faker.person.firstName(),
-        25,
-        {
+      const teacher = new TeacherEntity({
+        name: faker.person.firstName(),
+        age: 25,
+        address: {
           city: faker.location.city(),
           country: faker.location.country(),
           state: faker.location.state(),
           street: faker.location.streetAddress(),
           postalCode: faker.number.int({ max: 3000 }).toString(10),
         },
-        schoolEntity,
-      );
+        school: schoolEntity,
+      });
       em.persist(teacher);
       await em.flush();
     } catch (e) {

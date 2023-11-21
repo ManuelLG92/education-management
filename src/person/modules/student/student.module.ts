@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { StudentService } from './use-cases/student.service';
-import { StudentController } from './infra/controllers/student.controller';
+import { StudentController } from './controllers/student.controller';
 import { ParentsService } from './use-cases/parents.service';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { StudentEntity } from './infra/persistence/Student.entity';
-import { ParentEntity } from './infra/persistence/Parent.entity';
+import { Student } from './entity/student';
+import { Parent } from './entity/parent';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([StudentEntity, ParentEntity])],
+  imports: [MikroOrmModule.forFeature([Student, Parent])],
   controllers: [StudentController],
   providers: [StudentService, ParentsService],
 })
