@@ -1,6 +1,6 @@
 import { Collection, Entity, ManyToMany, ManyToOne } from '@mikro-orm/core';
 import { Parent } from './parent';
-import { Section } from '../../../../school/modules/course/modules/section/entity/section';
+import { Section } from '../../../../school/modules/season/modules/course/modules/section/entity/section';
 import {
   Person,
   PersonEntityFields,

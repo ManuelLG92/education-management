@@ -3,7 +3,7 @@ import { Course } from '../../../entity/course';
 import {
   AggregateRootEntity,
   ExistingAggregateRoot,
-} from '../../../../../../common/entities/aggregate-root-entity';
+} from '../../../../../../../../common/entities/aggregate-root-entity';
 
 export type SubjectEntityTypes = {
   name: string;

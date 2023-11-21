@@ -16,8 +16,12 @@ export class SeasonController {
   constructor(private readonly service: SeasonService) {}
 
   @Post()
-  create(@Body() createSchoolDto: CreateSeasonDto) {
-    return this.service.create(createSchoolDto);
+  create(@Body() dto: CreateSeasonDto) {
+    return this.service.create({
+      ...dto,
+      startAt: new Date(dto.startAt),
+      endAt: new Date(dto.endAt),
+    });
   }
 
   @Get()

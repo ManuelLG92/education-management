@@ -3,8 +3,8 @@ import { CreateSeasonDto } from '../controllers/dto/create-season.dto';
 import { UpdateSeasonDto } from '../controllers/dto/update-season.dto';
 import { EntityManager } from '@mikro-orm/core';
 import { Season } from '../entity/season';
-import { Course } from '../../../entity/course';
-import { School } from '../../../../../entity/school';
+import { Course } from '../modules/course/entity/course';
+import { School } from '../../../entity/school';
 
 @Injectable()
 export class SeasonService {
@@ -16,7 +16,7 @@ export class SeasonService {
     const courses = await this.em.find(Course, {
       id: { $in: coursesId },
     });
-    const season = new Season({ name, courses, school, startAt, endAt });
+    const season = new Season({ name, courses: [], school, startAt, endAt });
     season.courses.add(courses);
     await this.em.insert(season);
     return season;

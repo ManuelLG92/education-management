@@ -5,12 +5,13 @@ import {
   ManyToOne,
   Property,
 } from '@mikro-orm/core';
-import { Course } from '../../../entity/course';
+import { Course } from '../modules/course/entity/course';
 import {
   AggregateRootEntity,
   ExistingAggregateRoot,
-} from '../../../../../../common/entities/aggregate-root-entity';
-import { School } from '../../../../../entity/school';
+} from '../../../../common/entities/aggregate-root-entity';
+import { School } from '../../../entity/school';
+import { BadRequestException } from '@nestjs/common';
 
 export type SeasonEntityTypes = {
   name: string;
@@ -42,6 +43,9 @@ export class Season extends AggregateRootEntity {
 
   constructor({ name, startAt, endAt, school, ...rest }: SeasonEntityTypes) {
     super(rest);
+    if (startAt.getTime() > endAt.getTime()) {
+      throw new BadRequestException('startAt must be before endAt');
+    }
     this.name = name;
     this.startAt = startAt;
     this.endAt = endAt;

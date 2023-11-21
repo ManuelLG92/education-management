@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { EntityManager } from '@mikro-orm/core';
-import { Season } from '../school/modules/course/modules/season/entity/season';
+import { Season } from '../school/modules/season/entity/season';
 import { Seeder } from '@mikro-orm/seeder';
-import { Course } from '../school/modules/course/entity/course';
-import { Section } from '../school/modules/course/modules/section/entity/section';
+import { Course } from '../school/modules/season/modules/course/entity/course';
+import { Section } from '../school/modules/season/modules/course/modules/section/entity/section';
 import { Student } from '../person/modules/student/entity/student';
-import { Subject } from '../school/modules/course/modules/subject/entity/subject';
+import { Subject } from '../school/modules/season/modules/course/modules/subject/entity/subject';
 import { TeacherEntity } from '../person/modules/teacher/entity/Teacher.entity';
 import { PersonRoles } from '../person/entity/person';
 import { School } from '../school/entity/school';

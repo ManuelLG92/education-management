@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TemplateService } from './use-cases/template.service';
-import { TemplateRepository } from './infra/persistence/template.repository';
-import { TemplateController } from './infra/controllers/template.controller';
+import { TemplateController } from './controllers/template.controller';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Template } from './entity/template.entity';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([TemplateRepository])],
+  imports: [MikroOrmModule.forFeature([Template])],
   controllers: [TemplateController],
   providers: [TemplateService],
 })

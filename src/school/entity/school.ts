@@ -10,7 +10,7 @@ import {
   ExistingAggregateRoot,
 } from '../../common/entities/aggregate-root-entity';
 import { Address } from '../../person/entity/address';
-import { Season } from '../modules/course/modules/season/entity/season';
+import { Season } from '../modules/season/entity/season';
 import { TeacherEntity } from '../../person/modules/teacher/entity/Teacher.entity';
 
 export type SchoolEntityFields = {

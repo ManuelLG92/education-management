@@ -5,6 +5,8 @@ import { SchoolModule } from './school/school.module';
 import { PersonModule } from './person/person.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ReflectMetadataProvider } from '@mikro-orm/core';
+import { APP_FILTER } from '@nestjs/core';
+import { ErrorHandler } from './common/error-handler';
 
 @Module({
   imports: [
@@ -29,7 +31,13 @@ import { ReflectMetadataProvider } from '@mikro-orm/core';
     PersonModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ErrorHandler,
+    },
+    AppService,
+  ],
 })
 export class AppModule implements OnApplicationBootstrap {
   async onApplicationBootstrap() {

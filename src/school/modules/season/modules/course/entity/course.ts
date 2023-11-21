@@ -8,8 +8,8 @@ import {
 import {
   AggregateRootEntity,
   ExistingAggregateRoot,
-} from '../../../../common/entities/aggregate-root-entity';
-import { Season } from '../modules/season/entity/season';
+} from '../../../../../../common/entities/aggregate-root-entity';
+import { Season } from '../../../entity/season';
 import { Section } from '../modules/section/entity/section';
 import { Subject } from '../modules/subject/entity/subject';
 

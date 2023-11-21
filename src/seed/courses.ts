@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { Section } from '../school/modules/course/modules/section/entity/section';
-import { Subject } from '../school/modules/course/modules/subject/entity/subject';
-import { Season } from '../school/modules/course/modules/season/entity/season';
-import { Course } from '../school/modules/course/entity/course';
+import { Section } from '../school/modules/season/modules/course/modules/section/entity/section';
+import { Subject } from '../school/modules/season/modules/course/modules/subject/entity/subject';
+import { Season } from '../school/modules/season/entity/season';
+import { Course } from '../school/modules/season/modules/course/entity/course';
 import { Student } from '../person/modules/student/entity/student';
 import { Collection } from '@mikro-orm/core';
 import { TeacherEntity } from '../person/modules/teacher/entity/Teacher.entity';

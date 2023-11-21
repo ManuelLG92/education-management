@@ -9,8 +9,8 @@ import { Course } from '../../../entity/course';
 import {
   AggregateRootEntity,
   ExistingAggregateRoot,
-} from '../../../../../../common/entities/aggregate-root-entity';
-import { Student } from '../../../../../../person/modules/student/entity/student';
+} from '../../../../../../../../common/entities/aggregate-root-entity';
+import { Student } from '../../../../../../../../person/modules/student/entity/student';
 
 export type SectionEntityTypes = {
   name: string;

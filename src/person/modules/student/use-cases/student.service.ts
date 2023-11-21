@@ -4,7 +4,7 @@ import { UpdateStudentDto } from '../controllers/dto/update-student.dto';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Student as NewStudent } from '../entity/student';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Section } from '../../../../school/modules/course/modules/section/entity/section';
+import { Section } from '../../../../school/modules/season/modules/course/modules/section/entity/section';
 import { Parent } from '../entity/parent';
 
 @Injectable()
