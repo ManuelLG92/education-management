@@ -18,14 +18,33 @@ export class CourseService {
     return entity;
   }
 
-  async findAll() {
-    return this.em.find(
+  async findAll({
+    page,
+    limit,
+    like,
+  }: {
+    page: number;
+    limit: number;
+    like?: string;
+  }) {
+    const pager = page ?? 1;
+    const limiter = limit ?? 2;
+    const offset = (pager - 1) * limiter;
+    const [data, count] = await this.em.findAndCount(
       Course,
-      {},
+      { ...(like && { name: { $like: `%${like}%` } }) },
       {
         populate: ['subjects', 'seasons', 'sections'],
+        offset,
+        limit: limiter,
       },
     );
+    const totalPages = Math.ceil(count / limiter);
+    return {
+      data,
+      count: totalPages,
+      currentPage: pager,
+    };
   }
 
   async findOne(id: string) {
