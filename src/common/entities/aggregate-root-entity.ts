@@ -13,12 +13,12 @@ export class AggregateRootEntity {
 
   @Property({
     fieldName: 'createdAt',
-    columnType: 'date',
+    columnType: 'TIMESTAMP',
     default: new Date().toISOString(),
   })
   createdAt!: Date;
 
-  @Property({ fieldName: 'updatedAt', columnType: 'date', nullable: true })
+  @Property({ fieldName: 'updatedAt', columnType: 'TIMESTAMP', nullable: true })
   updatedAt?: Date;
 
   constructor({ id, createdAt, updatedAt }: ExistingAggregateRoot) {

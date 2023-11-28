@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MikroORM } from '@mikro-orm/core';
+import { NextFunction, Request, Response } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +24,13 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableShutdownHooks();
-  await app.listen(3000);
+  app.enableCors();
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.header('Access-Control-Expose-Headers', 'Content-Range');
+    next();
+  });
+  await app.listen(8001);
   Logger.log(`Server listening on port 3000`);
 
   const init = await app.resolve(MikroORM);

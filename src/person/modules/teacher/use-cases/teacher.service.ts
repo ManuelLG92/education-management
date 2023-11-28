@@ -13,7 +13,7 @@ export class TeacherService {
     private readonly repository: EntityRepository<TeacherEntity>,
     private readonly em: EntityManager,
   ) {}
-  async create(dto: CreateTeacherDto, schoolId: string) {
+  async create({ schoolId, ...dto }: CreateTeacherDto) {
     const school = await this.em.findOne(School, { id: schoolId });
     const entity = new TeacherEntity({ ...dto, school });
     await this.repository.nativeInsert(entity);

@@ -13,16 +13,14 @@ import { CourseService } from '../use-cases/course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
-@Controller('course')
+@Controller('courses')
 export class CourseController {
   constructor(private readonly service: CourseService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createSchoolDto: CreateCourseDto) {
-    const course = await this.service.create(createSchoolDto);
-    // return this.service.create(createSchoolDto);
-    return course.id;
+    return this.service.create(createSchoolDto);
   }
 
   @Get()

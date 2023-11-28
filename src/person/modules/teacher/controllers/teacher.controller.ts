@@ -11,14 +11,13 @@ import { TeacherService } from '../use-cases/teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 
-@Controller('teacher')
+@Controller('teachers')
 export class TeacherController {
   constructor(private readonly service: TeacherService) {}
 
   @Post()
   create(@Body() createSchoolDto: CreateTeacherDto) {
-    // return this.service.create(createSchoolDto);
-    return true;
+    return this.service.create(createSchoolDto);
   }
 
   @Get()

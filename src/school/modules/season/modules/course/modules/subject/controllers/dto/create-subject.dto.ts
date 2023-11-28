@@ -5,5 +5,5 @@ export class CreateSubjectDto {
   name: string;
 
   @IsString()
-  teacherId: string;
+  courseId: string;
 }

@@ -11,14 +11,13 @@ import { SubjectService } from '../use-cases/subject.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 
-@Controller('subject')
+@Controller('subjects')
 export class SubjectController {
   constructor(private readonly service: SubjectService) {}
 
   @Post()
   create(@Body() createSchoolDto: CreateSubjectDto) {
-    // return this.service.create(createSchoolDto);
-    return true;
+    return this.service.create(createSchoolDto);
   }
 
   @Get()

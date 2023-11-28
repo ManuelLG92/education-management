@@ -3,15 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Res,
+  Put,
 } from '@nestjs/common';
 import { SchoolService } from '../use-cases/school.service';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { UpdateSchoolDto } from './dto/update-school.dto';
+import { Response } from 'express';
 
-@Controller('school')
+@Controller('schools')
 export class SchoolController {
   constructor(private readonly schoolService: SchoolService) {}
 
@@ -21,8 +23,9 @@ export class SchoolController {
   }
 
   @Get()
-  findAll() {
-    return this.schoolService.findAll();
+  async findAll(@Res() res: Response) {
+    const data = await this.schoolService.findAll();
+    res.set({ 'Content-Range': data.length.toString() }).json(data);
   }
 
   @Get(':id')
@@ -30,7 +33,7 @@ export class SchoolController {
     return this.schoolService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
     return this.schoolService.update(id, updateSchoolDto);
   }

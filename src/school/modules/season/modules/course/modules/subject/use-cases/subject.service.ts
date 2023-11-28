@@ -8,8 +8,9 @@ import { Subject } from '../entity/subject';
 @Injectable()
 export class SubjectService {
   constructor(private readonly em: EntityManager) {}
-  async create(data: CreateSubjectDto, course: Course) {
-    const entity = new Subject({ name: data.name, course });
+  async create({ name, courseId }: CreateSubjectDto) {
+    const course = await this.em.findOne(Course, courseId);
+    const entity = new Subject({ name, course });
     await this.em.persistAndFlush(entity);
     return entity;
   }

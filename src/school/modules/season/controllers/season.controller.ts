@@ -11,7 +11,7 @@ import { SeasonService } from '../use-cases/season.service';
 import { CreateSeasonDto } from './dto/create-season.dto';
 import { UpdateSeasonDto } from './dto/update-season.dto';
 
-@Controller('season')
+@Controller('seasons')
 export class SeasonController {
   constructor(private readonly service: SeasonService) {}
 
