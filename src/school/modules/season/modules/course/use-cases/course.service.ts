@@ -51,7 +51,7 @@ export class CourseService {
     return this.em.findOne(
       Course,
       { id },
-      { populate: ['subjects', 'seasons', 'sections'] },
+      { populate: ['subjects', 'seasons', 'sections', 'sections.students'] },
     );
   }
 
