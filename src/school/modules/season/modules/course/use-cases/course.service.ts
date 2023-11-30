@@ -3,6 +3,10 @@ import { CreateCourseDto } from '../controllers/dto/create-course.dto';
 import { UpdateCourseDto } from '../controllers/dto/update-course.dto';
 import { EntityManager } from '@mikro-orm/core';
 import { Course } from '../entity/course';
+import {
+  paginationDto,
+  PaginationOut,
+} from '../../../../../../common/list-helper';
 
 @Injectable()
 export class CourseService {
@@ -19,32 +23,20 @@ export class CourseService {
   }
 
   async findAll({
-    page,
-    limit,
     like,
-  }: {
-    page: number;
-    limit: number;
+    ...pagination
+  }: PaginationOut & {
     like?: string;
   }) {
-    const pager = page ?? 1;
-    const limiter = limit ?? 2;
-    const offset = (pager - 1) * limiter;
     const [data, count] = await this.em.findAndCount(
       Course,
-      { ...(like && { name: { $like: `%${like}%` } }) },
+      { ...(like && { name: { $ilike: `%${like}%` } }) },
       {
         populate: ['subjects', 'seasons', 'sections'],
-        offset,
-        limit: limiter,
+        ...pagination,
       },
     );
-    const totalPages = Math.ceil(count / limiter);
-    return {
-      data,
-      count: totalPages,
-      currentPage: pager,
-    };
+    return paginationDto(data, { ...pagination, count });
   }
 
   async findOne(id: string) {

@@ -17,7 +17,7 @@ export class ErrorHandler implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
-    Logger.log(exception);
+    Logger.error(exception);
     const validationData =
       exception instanceof BadRequestException ? exception.getResponse() : {};
     response.status(status).json({

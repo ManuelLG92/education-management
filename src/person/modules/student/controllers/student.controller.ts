@@ -6,10 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Logger,
 } from '@nestjs/common';
 import { StudentService } from '../use-cases/student.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { Request } from 'express';
+import { PaginationDecorator } from '../../../../common/pagination.decorator';
+import { PaginationOut } from '../../../../common/list-helper';
 
 @Controller('students')
 export class StudentController {
@@ -21,8 +26,15 @@ export class StudentController {
   }
 
   @Get()
-  findAll() {
-    return this.studentService.findAll();
+  async findAll(
+    @Req() req: Request,
+    // @Query() query: QueryDto,
+    @PaginationDecorator([{ prop: 'like' }]) data: PaginationOut,
+  ) {
+    Logger.log('req query', JSON.stringify(req.query));
+    Logger.log('req data', JSON.stringify(data));
+
+    return this.studentService.findAll(data);
   }
 
   @Get(':id')

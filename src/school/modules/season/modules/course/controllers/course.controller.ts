@@ -9,14 +9,14 @@ import {
   HttpStatus,
   HttpCode,
   Req,
-  Query,
   Logger,
 } from '@nestjs/common';
 import { CourseService } from '../use-cases/course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Request } from 'express';
-import { QueryDto } from '../modules/section/controllers/dto/create-section.dto';
+import { PaginationOut } from '../../../../../../common/list-helper';
+import { PaginationDecorator } from '../../../../../../common/pagination.decorator';
 
 @Controller('courses')
 export class CourseController {
@@ -30,13 +30,10 @@ export class CourseController {
 
   @Get()
   @Get()
-  findAll(@Req() req: Request, @Query() query: QueryDto) {
-    Logger.log(req.url, JSON.stringify(query));
-    return this.service.findAll({
-      ...(query.page && { page: Number(query.page) }),
-      ...(query.limit && { limit: Number(query.limit) }),
-      like: query.like,
-    });
+  findAll(@Req() req: Request, @PaginationDecorator() data: PaginationOut) {
+    Logger.log(req.url, JSON.stringify(data));
+    Logger.log('req query', JSON.stringify(req.query));
+    return this.service.findAll(data);
   }
 
   @Get(':id')
