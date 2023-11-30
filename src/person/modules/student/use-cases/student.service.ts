@@ -55,7 +55,7 @@ export class StudentService {
       {
         offset,
         limit: limiter,
-        populate: ['parents', 'section'],
+        populate: ['parents', 'section', 'section.courses'],
       },
     );
     const totalPages = Math.ceil(count / limiter);
